@@ -23,7 +23,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NicheMarket.Web.Models", "W
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NicheMarket.Services", "Service\NicheMarket.Services\NicheMarket.Services.csproj", "{6A5595E9-A7E3-4544-8B82-7764FA5492D1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoMapperConfiguration", "Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj", "{1B495F76-3AAB-47EE-9CBD-4FF78E26BC8A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapperConfiguration", "Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj", "{1B495F76-3AAB-47EE-9CBD-4FF78E26BC8A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
