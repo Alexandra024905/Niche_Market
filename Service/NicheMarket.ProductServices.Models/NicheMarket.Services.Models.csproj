@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
+    <ProjectReference Include="..\..\Data\NicheMarket.Data.Models\NicheMarket.Data.Models.csproj" />
+  </ItemGroup>
+
+</Project>

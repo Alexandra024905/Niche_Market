@@ -1,0 +1,21 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.14.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+ 
+    <ProjectReference Include="..\..\Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
+ 
+    <ProjectReference Include="..\..\Data\NicheMarket.Data.Models\NicheMarket.Data.Models.csproj" />
+    <ProjectReference Include="..\..\Data\NicheMarket.Data\NicheMarket.Data.csproj" />
+    <ProjectReference Include="..\NicheMarket.ProductServices.Models\NicheMarket.Services.Models.csproj" />
+  </ItemGroup>
+
+</Project>

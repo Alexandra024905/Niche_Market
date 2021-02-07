@@ -1,0 +1,33 @@
+﻿@model ProductViewModel
+
+@{
+    ViewData["Title"] = "Details";
+
+}
+
+<h1>Details</h1>
+
+<div class="row justify-content-center m-3">
+
+    <div class="col-sm-5">
+        <div class="card">
+            <div class="card-header">
+                <h4>@Model.Title</h4>
+                <hr />
+            </div>
+
+            <div class="card-body text-center">
+                <img class="figure-img img-fluid rounded" src="@Url.Content(Model.ImageURL)"  asp-append-version="true" />
+                <h5>Price : @Model.Price</h5>
+                <h5>Type : @Model.Type</h5>
+                <h6>Description : @Model.Description</h6>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
