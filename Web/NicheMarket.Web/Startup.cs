@@ -41,6 +41,7 @@ namespace NicheMarket.Web
 
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IRetailerService,RetailerService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -79,6 +80,30 @@ namespace NicheMarket.Web
                 {
                     dbContext.Database.Migrate();
 
+                    if (dbContext.Roles.Count() == 0)
+                    {
+                        dbContext.Roles.Add(new IdentityRole
+                        {
+                            Name = "Admin",
+                            NormalizedName = "ADMIN",
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
+                                       dbContext.Roles.Add(new IdentityRole
+                        {
+                            Name = "Retailer",
+                            NormalizedName = "RETAILER",
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
+
+                        dbContext.Roles.Add(new IdentityRole
+                        {
+                            Name = "Client",
+                            NormalizedName = "CLIENT",
+                            ConcurrencyStamp = Guid.NewGuid().ToString()
+                        });
+
+                        dbContext.SaveChanges();
+                    }
                 }
 
 

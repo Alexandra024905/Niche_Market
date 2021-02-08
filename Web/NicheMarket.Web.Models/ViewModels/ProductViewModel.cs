@@ -18,5 +18,6 @@ namespace NicheMarket.Web.Models.ViewModels
         public string Description { get; set; }
 
         public double Price { get; set; }
+        public string RetailerId { get; set; }
     }
 }

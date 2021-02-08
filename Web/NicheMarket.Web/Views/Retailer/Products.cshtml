@@ -5,7 +5,13 @@
     ViewData["Title"] = "Products";
 }
 
-<h1>Products</h1>
+<h1>My Products</h1>
+
+<p>
+    <div type="submit" value="Order" class="btn btn-primary">
+        <a asp-controller="Product" asp-action="Create" style="color:white">Create New</a>
+    </div>
+</p>
 
 <div class="card-deck">
     @foreach (var item in Model)
@@ -19,13 +25,13 @@
                     <h6 asp-for="Price" class="card-title">Price:  @Html.DisplayFor(modelItem => item.Price)</h6>
 
                     <p class="card-text">Type : @Html.DisplayFor(model => item.Type)</p>
-                    <div type="submit"  class="btn btn-primary">
+                    <div type="submit" class="btn btn-primary">
                         <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" style="color:white">Edit</a>
-                    </div>                    
-                    <div type="submit"  class="btn btn-primary">
+                    </div>
+                    <div type="submit" class="btn btn-primary">
                         <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" style="color:white">Details</a>
-                    </div>                    
-                    <div type="submit"  class="btn btn-primary">
+                    </div>
+                    <div type="submit" class="btn btn-primary">
                         <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" style="color:white">Delete</a>
                     </div>
                 </div>

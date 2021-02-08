@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using NicheMarket.Data;
 using NicheMarket.Data.Models.Users;
 using NicheMarket.Web.Models.ViewModels;
@@ -26,9 +27,9 @@ namespace NicheMarket.Services
         public async Task<IEnumerable<UserRoleViewModel>> AllUsers()
         {
             List<UserRoleViewModel> users = new List<UserRoleViewModel>();
-            foreach (var item in dBContext.UserRoles)
+            foreach (var item in  dBContext.UserRoles)
             {
-                users.Add(new UserRoleViewModel
+                 users.Add(new UserRoleViewModel
                 {
                     RoleId = item.RoleId,
                     UserId = item.UserId,
@@ -60,14 +61,14 @@ namespace NicheMarket.Services
 
         public async Task<UserRoleViewModel> FindUserRole(string userId, string roleId)
         {
-            UserRoleViewModel userRoleViewModel = new UserRoleViewModel
+            UserRoleViewModel userRoleViewModel =  new UserRoleViewModel
             {
                 RoleId = roleId,
                 UserId = userId,
-                UserName = FindUser(userId).UserName,
-                RoleName = FindRoleName(roleId)
+                UserName  = FindUser(userId).UserName,
+                RoleName =  FindRoleName(roleId)
             };
-            return userRoleViewModel;
+            return  userRoleViewModel;
 
         }
 
@@ -78,18 +79,18 @@ namespace NicheMarket.Services
             {
                 if (UserExists(id))
                 {
-                    NicheMarketUser user = FindUser(id);
+                    NicheMarketUser user =  FindUser(id);
                     dBContext.Users.Remove(user);
                     dBContext.SaveChanges();
-                    result = true;
+                     result = true;
                 }
             }
-            return result;
+            return  result;
         }
 
         private bool UserExists(string id)
         {
-            return dBContext.Users.Any(e => e.Id == id);
+            return  dBContext.Users.Any(e => e.Id == id);
         }
 
         private NicheMarketUser FindUser(string id)

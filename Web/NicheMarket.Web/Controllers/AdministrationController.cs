@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
 {
+
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
@@ -29,6 +30,7 @@ namespace NicheMarket.Web.Controllers
             return View();
         }       
 
+        //add Delete,Edit role
         [HttpPost("/Administration/CreateRole")]
         public async Task<IActionResult> CreateRole (CreateRoleViewModel createRoleViewModel)
         {

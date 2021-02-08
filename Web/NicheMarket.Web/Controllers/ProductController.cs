@@ -9,6 +9,7 @@ using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
@@ -24,6 +25,7 @@ namespace NicheMarket.Web.Controllers
             this.productService = productService;
         }
 
+       // [Authorize(Roles = "Retailer,Admin")]
       //  [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
@@ -37,11 +39,12 @@ namespace NicheMarket.Web.Controllers
             return View();
         }
 
-
         [HttpPost]
+        [Authorize(Roles ="Retailer")]
         public async Task<IActionResult> Create(CreateProductBindingModel createProductBindingModel)
         {
             ProductServiceModel productServiceModel = createProductBindingModel.To<ProductServiceModel>();
+            productServiceModel.RetailerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (createProductBindingModel.FileUpload != null)
             {
                 string url = await this.cloudinaryService.UploadImage(createProductBindingModel.FileUpload);
@@ -49,8 +52,7 @@ namespace NicheMarket.Web.Controllers
             }
             else
             {
-                productServiceModel.ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png";
-                
+                productServiceModel.ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png";         
             }
 
             bool result = await productService.CreateProduct(productServiceModel);
@@ -75,7 +77,7 @@ namespace NicheMarket.Web.Controllers
                 serviceModel.ImageURL = url;
             }
             await productService.EditProduct(serviceModel);
-            //To do : redurect To Home.Index
+   
             return Redirect("/Product");
         }
 
