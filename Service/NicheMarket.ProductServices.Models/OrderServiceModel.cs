@@ -1,14 +1,14 @@
-﻿using System;
+﻿using NicheMarket.Data.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NicheMarket.Data.Models
+namespace NicheMarket.Services.Models
 {
-    public class Order
+    public class OrderServiceModel
     {
-        //Add [key]
         public string Id { get; set; }
         public string ClientId { get; set; }
         public string RetailerId { get; set; }

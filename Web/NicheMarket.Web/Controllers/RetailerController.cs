@@ -33,7 +33,7 @@ namespace NicheMarket.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Products()
+        public async Task<IActionResult>RetailerProducts()
         {
             return View(await retailerService.MyProducts(User.FindFirstValue(ClaimTypes.NameIdentifier)));
             //return View();

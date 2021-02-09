@@ -48,7 +48,14 @@
 </div>
 
 <div>
-    <a asp-controller="Administration" asp-action="Products">Back to List</a>
+    @if (User.IsInRole("Admin"))
+    {
+        <a asp-controller="Administration" asp-action="Products">Back to List</a>
+    }
+    @if (User.IsInRole("Retailer"))
+    {
+        <a asp-controller="Retailer" asp-action="RetailerProducts">Back to List</a>
+    }
 </div>
 
 @section Scripts {
@@ -61,5 +68,5 @@
                 $(this).next('.custom-file-label').html(fileName);
             })
         });
-    </script >
+    </script>
 }

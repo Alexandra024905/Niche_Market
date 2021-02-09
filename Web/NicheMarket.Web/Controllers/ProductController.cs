@@ -34,13 +34,14 @@ namespace NicheMarket.Web.Controllers
 
 
         [HttpGet]
+        [Route("Product/Create/{id?}")]
         public IActionResult Create()
         {
             return View();
         }
 
         [HttpPost]
-        [Authorize(Roles ="Retailer")]
+        [Authorize(Roles = "Retailer")]
         public async Task<IActionResult> Create(CreateProductBindingModel createProductBindingModel)
         {
             ProductServiceModel productServiceModel = createProductBindingModel.To<ProductServiceModel>();

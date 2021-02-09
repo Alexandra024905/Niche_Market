@@ -1,15 +1,16 @@
 ﻿@model IEnumerable<ProductViewModel>
 
+@using System.Security.Claims;
 
 @{
-    ViewData["Title"] = "Products";
+    ViewData["Title"] = "RetailerProducts";
 }
 
 <h1>My Products</h1>
 
 <p>
-    <div type="submit" value="Order" class="btn btn-primary">
-        <a asp-controller="Product" asp-action="Create" style="color:white">Create New</a>
+    <div type="submit" value="Create" class="btn btn-primary">
+        <a asp-controller="Product" asp-action="Create"  style="color:white">Create New</a>
     </div>
 </p>
 

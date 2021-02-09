@@ -41,15 +41,15 @@ namespace NicheMarket.Web
 
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();
-            services.AddTransient<IRetailerService,RetailerService>();
+            services.AddTransient<IRetailerService, RetailerService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
 
-            services.AddMvc(options =>
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            }).AddXmlSerializerFormatters();
+            //services.AddMvc(options =>
+            //{
+            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            //}).AddXmlSerializerFormatters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,7 +88,7 @@ namespace NicheMarket.Web
                             NormalizedName = "ADMIN",
                             ConcurrencyStamp = Guid.NewGuid().ToString()
                         });
-                                       dbContext.Roles.Add(new IdentityRole
+                        dbContext.Roles.Add(new IdentityRole
                         {
                             Name = "Retailer",
                             NormalizedName = "RETAILER",
@@ -112,8 +112,8 @@ namespace NicheMarket.Web
 
                 app.UseRouting();
 
-                app.UseAuthorization();
                 app.UseAuthentication();
+                app.UseAuthorization();
 
                 app.UseEndpoints(endpoints =>
                 {

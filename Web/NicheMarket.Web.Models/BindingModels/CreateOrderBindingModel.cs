@@ -4,17 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NicheMarket.Data.Models
+namespace NicheMarket.Web.Models.BindingModels
 {
-    public class Order
+   public class CreateOrderBindingModel
     {
-        //Add [key]
-        public string Id { get; set; }
         public string ClientId { get; set; }
         public string RetailerId { get; set; }
         public string Adress { get; set; }
         public string ClientName { get; set; }
         public double TotalPrice { get; set; }
-        public List<Product> Products { get; set; }
+        public List<string> Products { get; set; } //id
     }
 }
