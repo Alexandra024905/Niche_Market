@@ -24,12 +24,5 @@ namespace NicheMarket.Web.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> Login (IdentityUserLogin model, string returnUrl)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-
-        //    }
-        //}
     }
 }

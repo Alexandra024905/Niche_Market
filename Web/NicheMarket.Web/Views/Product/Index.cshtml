@@ -13,14 +13,15 @@
         <div class="col-md-4">
             <div class="card mb-4 box-shadow">
 
-                <img class="card-img-top imageThunbnail" src="@Url.Content(item.ImageURL)" asp-append-version="true"   style="height: 225px; width: 100%; display: block;">
+                <img class="card-img-top imageThunbnail" src="@Url.Content(item.ImageURL)" asp-append-version="true" style="height: 225px; width: 100%; display: block;">
                 <div class="card-body">
                     <h5 class="card-title"> @Html.DisplayFor(model => item.Title)</h5>
                     <h6 asp-for="Price" class="card-title">Price:  @Html.DisplayFor(modelItem => item.Price)</h6>
 
                     <p class="card-text">Type : @Html.DisplayFor(model => item.Type)</p>
-                    <div type="submit" value="Order" class="btn btn-primary">
-                        <a asp-action="Details" asp-route-id="@item.Id" style="color:white">Order</a>
+                    <div type="submit" value="PlaceOrder" class="btn btn-primary">
+                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">Buy Now</a>
+                        @*<a asp-controller="Client" asp-action="PlaceOrder" asp-route-productId="@item.Id" style="color:white">Order</a>*@
                     </div>
 
                 </div>

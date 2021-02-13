@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NicheMarket.Data.Models
 {
-    public class Product : IMapTo<ProductBindingModel>, IMapTo<ProductViewModel>
+    public class Product : IMapTo<ProductBindingModel>, IMapTo<ProductViewModel>, IMapFrom<ProductViewModel>
     {
         [Key]
         public string Id { get; set; }

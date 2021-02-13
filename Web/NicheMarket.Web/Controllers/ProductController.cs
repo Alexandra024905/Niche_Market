@@ -51,11 +51,6 @@ namespace NicheMarket.Web.Controllers
                 string url = await this.cloudinaryService.UploadImage(createProductBindingModel.FileUpload);
                 productServiceModel.ImageURL = url;
             }
-            else
-            {
-                productServiceModel.ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png";         
-            }
-
             bool result = await productService.CreateProduct(productServiceModel);
 
             return Redirect("/Product");

@@ -42,9 +42,14 @@ namespace NicheMarket.Web
             services.AddTransient<IProductService, ProductService>();
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRetailerService, RetailerService>();
+            services.AddTransient<IOrderService, OrderService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+
+            services.AddMvc()
+    .AddSessionStateTempDataProvider();
+            services.AddSession();
 
             //services.AddMvc(options =>
             //{
@@ -56,11 +61,16 @@ namespace NicheMarket.Web
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             AutoMapperConfig.RegisterMappings(
+                typeof(CreateProductBindingModel).Assembly.GetTypes(),
                 typeof(ProductBindingModel).Assembly.GetTypes(),
                 typeof(ProductViewModel).Assembly.GetTypes(),
-                typeof(CreateProductBindingModel).Assembly.GetTypes(),
+                typeof(ProductServiceModel).Assembly.GetTypes(),
                 typeof(Product).Assembly.GetTypes(),
-                typeof(ProductServiceModel).Assembly.GetTypes());
+                typeof(Order).Assembly.GetTypes(),
+                typeof(CreateOrderBindingModel).Assembly.GetTypes(),
+                typeof(OrderServiceModel).Assembly.GetTypes(),
+                typeof(OrderViewModel).Assembly.GetTypes());
+
 
 
             if (env.IsDevelopment())
@@ -114,6 +124,8 @@ namespace NicheMarket.Web
 
                 app.UseAuthentication();
                 app.UseAuthorization();
+
+                app.UseSession();
 
                 app.UseEndpoints(endpoints =>
                 {

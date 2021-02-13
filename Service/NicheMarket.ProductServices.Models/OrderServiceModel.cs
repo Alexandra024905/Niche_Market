@@ -1,4 +1,7 @@
-﻿using NicheMarket.Data.Models;
+﻿using AutoMapperConfiguration;
+using NicheMarket.Data.Models;
+using NicheMarket.Web.Models.BindingModels;
+using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Services.Models
 {
-    public class OrderServiceModel
+    public class OrderServiceModel : IMapTo<Order>,  IMapFrom<CreateOrderBindingModel>
     {
         public string Id { get; set; }
         public string ClientId { get; set; }
@@ -15,6 +18,7 @@ namespace NicheMarket.Services.Models
         public string Adress { get; set; }
         public string ClientName { get; set; }
         public double TotalPrice { get; set; }
-        public List<Product> Products { get; set; }
+        public List<string> Products { get; set; }
+        public bool IsCompleted { get; set; }
     }
 }

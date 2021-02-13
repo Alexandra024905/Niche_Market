@@ -39,9 +39,9 @@ namespace NicheMarket.Services
             Product newProduct = productServiceModel.To<Product>();
 
             newProduct.Id = Guid.NewGuid().ToString();
-            if (productServiceModel.ImageURL== "")
+            if (productServiceModel.ImageURL == "")
             {
-
+                newProduct.ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png";
             }
             bool result = await this.dBContext.AddAsync(newProduct) != null;
 
@@ -82,7 +82,7 @@ namespace NicheMarket.Services
         public async Task<bool> EditProduct(ProductServiceModel productServiceModel)
         {
             bool result = false;
-            if ( productServiceModel.Id != null)
+            if (productServiceModel.Id != null)
             {
                 if (ProductExists(productServiceModel.Id))
                 {
@@ -98,6 +98,11 @@ namespace NicheMarket.Services
         public async Task<Product> FindProduct(string id)
         {
             return await dBContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+        } 
+        public async Task<ProductViewModel> Find(string id)
+        {
+            Product product =  await FindProduct(id);
+            return  product.To<ProductViewModel>();
         }
 
         private bool ProductExists(string id)

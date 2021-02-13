@@ -1,16 +1,17 @@
 ﻿@model CreateOrderBindingModel
 
+
 @{
     ViewData["Title"] = "PlaceOrder";
 }
 
-<h1>Create</h1>
+<h1>Place Order</h1>
 
-<h4>Place Order</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form enctype="multipart/form-data" asp-action="Create">
+        <form enctype="multipart/form-data" asp-action="PlaceOrder">
+
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ClientName" class="control-label"></label>
@@ -23,7 +24,7 @@
                 <span asp-validation-for="Adress" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Place Order" class="btn btn-primary" />
+                <input type="submit" value="PlaceOrder" class="btn btn-primary" />
             </div>
         </form>
     </div>

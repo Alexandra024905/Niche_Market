@@ -14,5 +14,7 @@ namespace NicheMarket.Services
         Task<bool> DeleteProduct(string id);
         Task <List<ProductViewModel>> AllProducts();
         Task<ProductBindingModel> GetProduct(string id);
+       // ProductViewModel Find(string id);
+        Task<ProductViewModel> Find(string id);
     }
 }
