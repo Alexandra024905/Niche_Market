@@ -28,4 +28,10 @@
     <ProjectReference Include="..\NicheMarket.Web.Models\NicheMarket.Web.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="wwwroot\css\cart.css">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

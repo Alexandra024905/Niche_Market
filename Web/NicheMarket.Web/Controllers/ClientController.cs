@@ -1,4 +1,5 @@
 ﻿using AutoMapperConfiguration;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NicheMarket.Services;
 using NicheMarket.Services.Models;
@@ -12,6 +13,7 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
 {
+    [Authorize]
     public class ClientController : Controller
     {
         private readonly IOrderService orderService;

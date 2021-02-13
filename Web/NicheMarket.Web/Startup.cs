@@ -50,11 +50,6 @@ namespace NicheMarket.Web
             services.AddMvc()
     .AddSessionStateTempDataProvider();
             services.AddSession();
-
-            //services.AddMvc(options =>
-            //{
-            //    var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-            //}).AddXmlSerializerFormatters();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
