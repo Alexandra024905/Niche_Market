@@ -18,13 +18,52 @@
             </form>
         </li>
         <li>
-            @if (User.IsInRole("Retailer"))
-            {
-                <form  asp-controller="Retailer" asp-action="RetailerProducts"  >
-                <button type="submit" class="nav-link btn btn-link text-dark">My Products</button>
+            <form asp-controller="Client" asp-action="MyOrders">
+                <button type="submit" class="nav-link btn btn-link text-dark">My Orders</button>
             </form>
-            }
         </li>
+        @if (User.IsInRole("Retailer"))
+        {
+            <li class="nav-item">
+                <form asp-controller="Retailer" asp-action="RetailerProducts">
+                    <button type="submit" class="nav-link btn btn-link text-dark">My Products</button>
+                </form>
+            </li>
+
+            <li class="nav-item">
+
+                <form asp-controller="Retailer" asp-action="RetailerOrders">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Orders</button>
+                </form>
+            </li>
+        }
+        @if (User.IsInRole("Admin"))
+        {
+            <li class="nav-item">
+
+                <form asp-controller="Administration" asp-action="Products">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Products</button>
+                </form>
+            </li>
+            <li class="nav-item">
+                <form asp-controller="Administration" asp-action="Users">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Users</button>
+                </form>
+            </li>
+            <li class="nav-item">
+
+                <form asp-controller="Administration" asp-action="CreateRole">
+                    <button type="submit" class="nav-link btn btn-link text-dark">Create Role</button>
+                </form>
+            </li>
+        }
+        @*<li class="nav-item">
+
+            <form asp-controller="Cart" asp-action="Index">
+                <button type="submit" class="nav-link btn btn-link text-dark">Shopping Cart</button>
+            </form>
+        </li>*@
+
     }
     else
     {

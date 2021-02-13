@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NicheMarket.Services;
 using NicheMarket.Web.Models.ViewModels;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 namespace NicheMarket.Web.Controllers
 {
 
+     [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;

@@ -27,9 +27,9 @@ namespace NicheMarket.Services
         public async Task<IEnumerable<UserRoleViewModel>> AllUsers()
         {
             List<UserRoleViewModel> users = new List<UserRoleViewModel>();
-            foreach (var item in  dBContext.UserRoles)
+            foreach (var item in dBContext.UserRoles)
             {
-                 users.Add(new UserRoleViewModel
+                users.Add(new UserRoleViewModel
                 {
                     RoleId = item.RoleId,
                     UserId = item.UserId,
@@ -48,11 +48,14 @@ namespace NicheMarket.Services
             {
                 if (RoleExists(userRoleViewModel.RoleName))
                 {
-                    NicheMarketUser user = FindUser(userRoleViewModel.UserId);
-                    string oldRoleName =  FindRoleName(userRoleViewModel.RoleId);
-                    await userManager.AddToRoleAsync(user, userRoleViewModel.RoleName);
-                    await userManager.RemoveFromRoleAsync(user, oldRoleName);
-                    dBContext.SaveChanges();
+                    string oldRoleName = FindRoleName(userRoleViewModel.RoleId);
+                    if (oldRoleName != userRoleViewModel.RoleName)
+                    {
+                        NicheMarketUser user = FindUser(userRoleViewModel.UserId);
+                        await userManager.AddToRoleAsync(user, userRoleViewModel.RoleName);
+                        await userManager.RemoveFromRoleAsync(user, oldRoleName);
+                        dBContext.SaveChanges();
+                    }
                     result = true;
                 }
             }
@@ -61,14 +64,14 @@ namespace NicheMarket.Services
 
         public async Task<UserRoleViewModel> FindUserRole(string userId, string roleId)
         {
-            UserRoleViewModel userRoleViewModel =  new UserRoleViewModel
+            UserRoleViewModel userRoleViewModel = new UserRoleViewModel
             {
                 RoleId = roleId,
                 UserId = userId,
-                UserName  = FindUser(userId).UserName,
-                RoleName =  FindRoleName(roleId)
+                UserName = FindUser(userId).UserName,
+                RoleName = FindRoleName(roleId)
             };
-            return  userRoleViewModel;
+            return userRoleViewModel;
 
         }
 
@@ -79,18 +82,18 @@ namespace NicheMarket.Services
             {
                 if (UserExists(id))
                 {
-                    NicheMarketUser user =  FindUser(id);
+                    NicheMarketUser user = FindUser(id);
                     dBContext.Users.Remove(user);
                     dBContext.SaveChanges();
-                     result = true;
+                    result = true;
                 }
             }
-            return  result;
+            return result;
         }
 
         private bool UserExists(string id)
         {
-            return  dBContext.Users.Any(e => e.Id == id);
+            return dBContext.Users.Any(e => e.Id == id);
         }
 
         private NicheMarketUser FindUser(string id)

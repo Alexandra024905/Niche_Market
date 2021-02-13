@@ -20,7 +20,7 @@
 
                     <p class="card-text">Type : @Html.DisplayFor(model => item.Type)</p>
                     <div type="submit" value="PlaceOrder" class="btn btn-primary">
-                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.Id">Buy Now</a>
+                        <a asp-controller="cart" asp-action="buy" asp-route-id="@item.Id" style="color:white">Buy Now</a>
                         @*<a asp-controller="Client" asp-action="PlaceOrder" asp-route-productId="@item.Id" style="color:white">Order</a>*@
                     </div>
 

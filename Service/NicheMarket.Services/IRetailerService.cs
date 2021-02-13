@@ -11,6 +11,6 @@ namespace NicheMarket.Services
     {
         Task<IEnumerable<ProductViewModel>> MyProducts(string retailerId);
 
-      //Task<IEnumerable<OrderViewModel>> Orders();
+        Task<IEnumerable<OrderViewModel>> RetailerOrders(string retailerId);
     }
 }

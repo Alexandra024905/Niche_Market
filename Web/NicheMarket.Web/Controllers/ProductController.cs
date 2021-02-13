@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
 {
-   // [Authorize]
+ 
     public class ProductController : Controller
     {
         private readonly ICloudinaryService cloudinaryService;
@@ -25,8 +25,8 @@ namespace NicheMarket.Web.Controllers
             this.productService = productService;
         }
 
-       // [Authorize(Roles = "Retailer,Admin")]
-      //  [AllowAnonymous]
+
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             return View(await productService.AllProducts());
@@ -41,7 +41,7 @@ namespace NicheMarket.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Retailer")]
+        [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> Create(CreateProductBindingModel createProductBindingModel)
         {
             ProductServiceModel productServiceModel = createProductBindingModel.To<ProductServiceModel>();
@@ -58,12 +58,14 @@ namespace NicheMarket.Web.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> Edit(string id)
         {
             return View(await productService.GetProduct(id));
         }
 
         [HttpPost]
+        [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> Edit(ProductBindingModel product)
         {
             ProductServiceModel serviceModel = product.To<ProductServiceModel>();
@@ -73,12 +75,12 @@ namespace NicheMarket.Web.Controllers
                 serviceModel.ImageURL = url;
             }
             await productService.EditProduct(serviceModel);
-   
+
             return Redirect("/Product");
         }
 
-       
-      //  [AllowAnonymous]
+
+        [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
             ProductViewModel product = await productService.DetailsProduct(id);
@@ -92,12 +94,14 @@ namespace NicheMarket.Web.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> Delete(string id)
         {
             return View(await productService.DetailsProduct(id));
         }
 
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             await productService.DeleteProduct(id);

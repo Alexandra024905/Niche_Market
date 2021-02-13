@@ -1,0 +1,49 @@
+﻿@model IEnumerable<OrderViewModel>
+
+
+@{
+    ViewData["Title"] = "MyOrders";
+}
+
+<h1>My Orders</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ClientName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Adress)
+            </th>        
+            <th>
+                @Html.DisplayNameFor(model => model.IsCompleted)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ClientName)
+                </td>
+                <th>
+                    @Html.DisplayFor(modelItem => item.Adress)
+                </th>       
+                <th>
+                    @Html.DisplayFor(modelItem => item.IsCompleted)
+                </th>
+
+                <td>
+                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+

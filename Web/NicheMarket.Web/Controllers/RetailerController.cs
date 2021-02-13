@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NicheMarket.Data.Models.Users;
@@ -11,21 +12,16 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
 {
+    [Authorize(Roles = "Retailer")]
     public class RetailerController : Controller
     {
-        private readonly IProductService productService;
         private readonly IRetailerService retailerService;
-        private readonly IUserService userService; // edit my role
-
-        private readonly UserManager<NicheMarketUser> userManager;
 
 
-        public RetailerController(IProductService productService, IUserService userService, IRetailerService retailerService, UserManager<NicheMarketUser> userManager)
+
+        public RetailerController( IRetailerService retailerService)
         {
-            this.productService = productService;
-            this.userService = userService;
             this.retailerService = retailerService;
-            this.userManager = userManager;
         }
 
         public ActionResult Index()
@@ -36,10 +32,14 @@ namespace NicheMarket.Web.Controllers
         public async Task<IActionResult>RetailerProducts()
         {
             return View(await retailerService.MyProducts(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-            //return View();
+        }      
+        
+        public async Task<IActionResult>RetailerOrders()
+        {
+            return View(await retailerService.RetailerOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
 
-
+        
 
     }
 }

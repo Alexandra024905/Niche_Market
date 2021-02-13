@@ -42,13 +42,20 @@ namespace NicheMarket.Web.Controllers
                 orderServiceModel.Products.Add(item.Product.Id);
             }
             bool result = await orderService.CreateOrder(orderServiceModel);
-            return Redirect("Order");
+            return Redirect("MyOrders");
         }
 
-        [HttpGet]
         public async Task<IActionResult> MyOrders()
         {
-            return View();
+            return View(await orderService.MyOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        }      
+        
+        public async Task<IActionResult> DeleteOrder(string orderId)
+        {
+            await orderService.DeleteOrder(orderId);
+            return Redirect("MyOrders");
         }
+
+
     }
 }
