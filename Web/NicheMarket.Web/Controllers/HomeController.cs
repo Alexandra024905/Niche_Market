@@ -22,7 +22,8 @@ namespace NicheMarket.Web.Controllers
 
         public IActionResult Index()
         {
-            return RedirectToAction("Index", "Product");
+            //return RedirectToAction("Index", "Product");
+            return View();
         }
 
         public IActionResult Privacy()

@@ -66,7 +66,7 @@ namespace NicheMarket.Services
             return result;
         }
 
-        public async Task<ProductViewModel> DetailsProduct(string id)
+        public async Task<ProductViewModel> ProductDetails(string id)
         {
             Product product = await dBContext.Products.FirstOrDefaultAsync(p => p.Id == id);
 

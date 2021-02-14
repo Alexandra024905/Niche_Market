@@ -83,7 +83,7 @@ namespace NicheMarket.Web.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> Details(string id)
         {
-            ProductViewModel product = await productService.DetailsProduct(id);
+            ProductViewModel product = await productService.ProductDetails(id);
             if (product == null)
             {
                 return NotFound();
@@ -97,7 +97,7 @@ namespace NicheMarket.Web.Controllers
         [Authorize(Roles = "Retailer,Admin")]
         public async Task<IActionResult> Delete(string id)
         {
-            return View(await productService.DetailsProduct(id));
+            return View(await productService.ProductDetails(id));
         }
 
         [HttpPost, ActionName("Delete")]
