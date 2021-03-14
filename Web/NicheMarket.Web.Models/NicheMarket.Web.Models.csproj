@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
+    <ProjectReference Include="..\..\Common\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
   </ItemGroup>
 
   <ItemGroup>

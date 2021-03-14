@@ -10,6 +10,8 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
     <link href="@Url.Content("~/css/cart.css")" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
 
@@ -34,7 +36,9 @@
                                 <div class="row text-muted">@item.Product.Type</div>
                             </div>
                             <div class="col">
-                                <a href="">-</a> <a href="@item.Quantity" class="border">@item.Quantity</a> <a href="#">+</a>
+                                <a asp-controller="Cart" asp-action="Decrease" asp-route-id="@item.Product.Id">-</a>
+                                <a href="@item.Quantity" class="border">@item.Quantity</a>
+                                <a asp-controller="Cart" asp-action="Increase" asp-route-id="@item.Product.Id">+</a>
                                 <div class="col">&euro;@item.Product.Price </div>
                             </div>
                             <div class="col">
@@ -43,10 +47,8 @@
                         </div>
                     </div>
                 }
-            
 
-                    <a class="text-muted" asp-controller="product" asp-action="index"> Back to shop</a>
-
+                <div class="back-to-shop"> <a href="/product/index">&leftarrow;<span class="text-muted">Back to shop</span></a></div>
             </div>
 
             <div class="col-md-4 summary">
@@ -54,16 +56,12 @@
                     <h5><b>Summary</b></h5>
                 </div>
                 <hr>
-                <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
+                <div class="row" style="padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">&euro;@ViewBag.total  </div>
-                    <div>
-                 
-                            <a asp-controller="Client" asp-action="PlaceOrder" asp-route-cart="@ViewBag.cart" color="#fff">Order</a>
-
-                    </div>
-                </div>
+                    <div class="col text-right">&euro; @ViewBag.total</div>
+                </div> <a class="btn btn-primary" href="/client/placeOrder?id=@ViewBag.cart">Place order</a>
             </div>
+
         </div>
     </div>
 </body>

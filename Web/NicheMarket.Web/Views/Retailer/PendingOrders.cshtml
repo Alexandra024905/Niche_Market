@@ -2,10 +2,10 @@
 
 
 @{
-    ViewData["Title"] = "MyOrders";
+    ViewData["Title"] = "RetailerOrders";
 }
 
-<h1>Order History</h1>
+<h1>Orders</h1>
 
 <table class="table">
     <thead>
@@ -15,7 +15,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Adress)
-            </th>        
+            </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsCompleted)
             </th>
@@ -32,13 +32,13 @@
                 </td>
                 <th>
                     @Html.DisplayFor(modelItem => item.Adress)
-                </th>       
+                </th>
                 <th>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
+                    <a class="btn btn-primary" asp-controller="Retailer" asp-action="CompleteOrder" asp-route-orderId="@item.Id">Complete</a>
                 </th>
 
                 <td>
-                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Delete</a>
+                    <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-userId="@item.Id">Delete</a>
                 </td>
             </tr>
         }

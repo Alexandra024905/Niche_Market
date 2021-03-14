@@ -17,8 +17,6 @@ namespace NicheMarket.Web.Controllers
     {
         private readonly IRetailerService retailerService;
 
-
-
         public RetailerController( IRetailerService retailerService)
         {
             this.retailerService = retailerService;
@@ -34,12 +32,27 @@ namespace NicheMarket.Web.Controllers
             return View(await retailerService.MyProducts(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }      
         
-        public async Task<IActionResult>RetailerOrders()
+        public async Task<IActionResult>CompletedOrders()
         {
-            return View(await retailerService.RetailerOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+            return View(await retailerService.CompletedOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
+        }      
+
+        public async Task<IActionResult>PendingOrders()
+        {
+            return View(await retailerService.PendingOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
         }
 
+        public async Task<IActionResult> CompleteOrder(string orderId)
+        {
+           await retailerService.ComleteOrder(orderId);
+            return Redirect("PendingOrders");
+        }      
         
+        public async Task<IActionResult> UndoOrder(string orderId)
+        {
+           await retailerService.UndoOrder(orderId);
+            return Redirect("CompletedOrders");
+        }
 
     }
 }

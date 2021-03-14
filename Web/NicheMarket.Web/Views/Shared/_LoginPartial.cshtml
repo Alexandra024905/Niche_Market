@@ -18,10 +18,23 @@
                 </form>
             </li>
 
-            <li class="nav-item">
-                <form asp-controller="Retailer" asp-action="RetailerOrders">
-                    <button type="submit" class="nav-link btn btn-link text-dark">Client Orders</button>
-                </form>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                    Client Orders
+                </a>
+                <ul class="dropdown-menu text-dark" aria-labelledby="navbarDropdown">
+                    <li>
+                        <form asp-controller="Retailer" asp-action="CompletedOrders">
+                            <button type="submit" class="nav-link btn btn-link text-dark">Compeleted Orders</button>
+                        </form>
+                    </li>
+                    <li>
+                        <form asp-controller="Retailer" asp-action="PendingOrders">
+                            <button type="submit" class="nav-link btn btn-link text-dark">Pending Orders</button>
+                        </form>
+                    </li>
+                </ul>
             </li>
         }
         @if (User.IsInRole("Admin"))
@@ -46,7 +59,7 @@
         }
         <li class="nav-item">
             <form asp-controller="Client" asp-action="MyOrders">
-                <button type="submit" class="nav-link btn btn-link text-dark">My Orders</button>
+                <button type="submit" class="nav-link btn btn-link text-dark">Order History</button>
             </form>
         </li>
         <li class="nav-item dropdown">

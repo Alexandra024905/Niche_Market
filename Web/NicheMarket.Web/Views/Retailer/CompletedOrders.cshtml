@@ -17,7 +17,6 @@
                 @Html.DisplayNameFor(model => model.Adress)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
             </th>
             <th></th>
         </tr>
@@ -34,11 +33,11 @@
                     @Html.DisplayFor(modelItem => item.Adress)
                 </th>
                 <th>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
+                    <a class="btn btn-primary" asp-controller="Retailer" asp-action="UndoOrder" asp-route-orderId="@item.Id">Undo</a>
                 </th>
 
                 <td>
-                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-userId="@item.Id">Delete</a>
+                    <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-userId="@item.Id">Delete</a>
                 </td>
             </tr>
         }

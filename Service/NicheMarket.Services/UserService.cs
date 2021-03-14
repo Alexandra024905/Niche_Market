@@ -82,7 +82,7 @@ namespace NicheMarket.Services
             {
                 if (UserExists(id))
                 {
-                    NicheMarketUser user = FindUser(id);
+                    NicheMarketUser user =  FindUser(id);
                     dBContext.Users.Remove(user);
                     dBContext.SaveChanges();
                     result = true;

@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Commun\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
+    <ProjectReference Include="..\..\Common\AutoMapperConfiguration\AutoMapperConfiguration.csproj" />
     <ProjectReference Include="..\..\Data\NicheMarket.Data.Models\NicheMarket.Data.Models.csproj" />
     <ProjectReference Include="..\..\Data\NicheMarket.Data\NicheMarket.Data.csproj" />
     <ProjectReference Include="..\..\Service\NicheMarket.ProductServices.Models\NicheMarket.Services.Models.csproj" />

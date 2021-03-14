@@ -63,6 +63,36 @@ namespace NicheMarket.Web.Controllers
             return RedirectToAction("Index");
         }
 
+        public IActionResult Decrease(string id)
+        {
+            List<ShoppingCartItem> cart = SessionHelper.GetObjectFromJson<List<ShoppingCartItem>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            if (index != -1)
+            {
+                if (cart[index].Quantity == 1)
+                {
+                    cart.RemoveAt(index);
+                }
+                else
+                {
+                    cart[index].Quantity--;
+                }
+            }
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+        public IActionResult Increase(string id)
+        {
+            List<ShoppingCartItem> cart = SessionHelper.GetObjectFromJson<List<ShoppingCartItem>>(HttpContext.Session, "cart");
+            int index = isExist(id);
+            if (index != -1)
+            {
+                cart[index].Quantity++;
+            }
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", cart);
+            return RedirectToAction("Index");
+        }
+
         private int isExist(string id)
         {
             List<ShoppingCartItem> cart = SessionHelper.GetObjectFromJson<List<ShoppingCartItem>>(HttpContext.Session, "cart");
