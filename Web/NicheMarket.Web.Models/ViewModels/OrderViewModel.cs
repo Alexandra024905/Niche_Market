@@ -13,8 +13,10 @@ namespace NicheMarket.Web.Models.ViewModels
         public string RetailerId { get; set; }
         public string Adress { get; set; }
         public string ClientName { get; set; }
-        public double TotalPrice { get; set; }
-        public List<string> Products { get; set; } //names
+        public decimal TotalPrice { get; set; }
+        public List<string> Products { get; set; } 
         public bool IsCompleted { get; set; }
+
+
     }
 }

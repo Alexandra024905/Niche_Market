@@ -27,13 +27,15 @@ namespace NicheMarket.Services
         public async Task<IEnumerable<UserRoleViewModel>> AllUsers()
         {
             List<UserRoleViewModel> users = new List<UserRoleViewModel>();
+
             foreach (var item in dBContext.UserRoles)
             {
                 users.Add(new UserRoleViewModel
                 {
                     RoleId = item.RoleId,
                     UserId = item.UserId,
-                    UserName = FindUser(item.UserId).UserName,
+                    //UserName = FindUser(item.UserId).UserName,
+                    UserName = (await dBContext.Users.FindAsync(item.UserId)).UserName,
                     RoleName = FindRoleName(item.RoleId)
                 });
             }
@@ -68,10 +70,10 @@ namespace NicheMarket.Services
             {
                 RoleId = roleId,
                 UserId = userId,
-                UserName = FindUser(userId).UserName,
+                UserName = (await dBContext.Users.FindAsync(userId)).UserName,
                 RoleName = FindRoleName(roleId)
             };
-            return userRoleViewModel;
+            return  userRoleViewModel;
 
         }
 
@@ -82,7 +84,7 @@ namespace NicheMarket.Services
             {
                 if (UserExists(id))
                 {
-                    NicheMarketUser user =  FindUser(id);
+                    NicheMarketUser user = await dBContext.Users.FindAsync(id);
                     dBContext.Users.Remove(user);
                     dBContext.SaveChanges();
                     result = true;

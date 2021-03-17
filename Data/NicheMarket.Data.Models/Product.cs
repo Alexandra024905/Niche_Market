@@ -4,6 +4,7 @@ using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NicheMarket.Data.Models
 {
@@ -15,11 +16,12 @@ namespace NicheMarket.Data.Models
 
         public string ImageURL { get; set; }
 
-        public string Type { get; set; }
+        public List<Category> Type { get; set; }
 
         public string Description { get; set; }
 
-        public double Price { get; set; }
+        [Column(TypeName = "decimal(28, 20)")]
+        public decimal Price { get; set; }
         public string RetailerId { get; set; }
 
     }

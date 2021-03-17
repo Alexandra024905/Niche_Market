@@ -44,6 +44,7 @@ namespace NicheMarket.Web.Controllers
                 orderServiceModel.Products.Add(item.Product.Id);
             }
             bool result = await orderService.CreateOrder(orderServiceModel);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", new List<ShoppingCartItem>());
             return Redirect("MyOrders");
         }
 
@@ -55,7 +56,7 @@ namespace NicheMarket.Web.Controllers
         public async Task<IActionResult> DeleteOrder(string orderId)
         {
             await orderService.DeleteOrder(orderId);
-            return Redirect("MyOrders");
+            return Redirect("/");
         }
 
 

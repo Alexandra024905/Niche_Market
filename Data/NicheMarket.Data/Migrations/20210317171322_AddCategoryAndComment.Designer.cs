@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NicheMarket.Data;
 
 namespace NicheMarket.Data.Migrations
 {
     [DbContext(typeof(NicheMarketDBContext))]
-    partial class NicheMarketDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210317171322_AddCategoryAndComment")]
+    partial class AddCategoryAndComment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -193,7 +195,7 @@ namespace NicheMarket.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(28,20)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.HasKey("Id");
 
@@ -215,7 +217,7 @@ namespace NicheMarket.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<decimal>("Price")
-                        .HasColumnType("decimal(28,20)");
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("RetailerId")
                         .HasColumnType("nvarchar(max)");

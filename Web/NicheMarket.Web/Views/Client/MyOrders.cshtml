@@ -15,9 +15,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Adress)
-            </th>        
+            </th>
             <th>
-                @Html.DisplayNameFor(model => model.IsCompleted)
+                Status
             </th>
             <th></th>
         </tr>
@@ -32,13 +32,22 @@
                 </td>
                 <th>
                     @Html.DisplayFor(modelItem => item.Adress)
-                </th>       
+                </th>
+
                 <th>
-                    @Html.DisplayFor(modelItem => item.IsCompleted)
+                    @if (@item.IsCompleted)
+                    {
+                        <label>Completed</label>
+                    }
+                    else
+                    {
+                        <label>Pending</label>
+                    }
+
                 </th>
 
                 <td>
-                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Delete</a>
+                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Cancel</a>
                 </td>
             </tr>
         }

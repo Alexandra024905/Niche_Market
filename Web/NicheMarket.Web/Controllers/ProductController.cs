@@ -51,9 +51,9 @@ namespace NicheMarket.Web.Controllers
                 string url = await this.cloudinaryService.UploadImage(createProductBindingModel.FileUpload);
                 productServiceModel.ImageURL = url;
             }
-            bool result = await productService.CreateProduct(productServiceModel);
+            await productService.CreateProduct(productServiceModel);
 
-            return Redirect("/Product");
+            return Redirect("/Retailer/RetailerProducts");
         }
 
 
@@ -76,7 +76,7 @@ namespace NicheMarket.Web.Controllers
             }
             await productService.EditProduct(serviceModel);
 
-            return Redirect("/Product");
+            return Redirect("/Retailer/RetailerProducts");
         }
 
 
@@ -105,7 +105,7 @@ namespace NicheMarket.Web.Controllers
         public async Task<IActionResult> DeleteConfirmed(string id)
         {
             await productService.DeleteProduct(id);
-            return Redirect("/Product");
+            return Redirect("/Retailer/RetailerProducts");
         }
     }
 

@@ -10,6 +10,8 @@ using Microsoft.EntityFrameworkCore;
 using NicheMarket.Web.Models.BindingModels;
 using System.Linq;
 using NicheMarket.Web.Models.ViewModels;
+using NicheMarket.Data.Models.Users;
+using System.Security.Claims;
 
 namespace NicheMarket.Services
 {
@@ -25,21 +27,18 @@ namespace NicheMarket.Services
 
         public async Task<List<ProductViewModel>> AllProducts()
         {
-            List<ProductViewModel> products = new List<ProductViewModel>();
+            List<ProductViewModel> products = await dBContext.Products
+                .Select(p => p.To<ProductViewModel>())
+                .ToListAsync();
 
-            foreach (var product in dBContext.Products)
-            {
-                products.Add(product.To<ProductViewModel>());
-            }
             return products;
         }
 
         public async Task<bool> CreateProduct(ProductServiceModel productServiceModel)
         {
             Product newProduct = productServiceModel.To<Product>();
-
             newProduct.Id = Guid.NewGuid().ToString();
-            if (productServiceModel.ImageURL == "")
+            if (productServiceModel.ImageURL == null)
             {
                 newProduct.ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png";
             }
@@ -86,7 +85,15 @@ namespace NicheMarket.Services
             {
                 if (ProductExists(productServiceModel.Id))
                 {
-                    Product product = productServiceModel.To<Product>();
+                    Product product = await FindProduct(productServiceModel.Id);
+                    product.Price = productServiceModel.Price;
+                    product.Title = productServiceModel.Title;
+                    product.Description = productServiceModel.Description;
+                    //product.Type = productServiceModel.Type;
+                    if (productServiceModel.ImageURL != null)
+                    {
+                    product.ImageURL = productServiceModel.ImageURL;
+                    }
                     dBContext.Products.Update(product);
                     dBContext.SaveChanges();
                     result = true;
@@ -98,11 +105,11 @@ namespace NicheMarket.Services
         public async Task<Product> FindProduct(string id)
         {
             return await dBContext.Products.FirstOrDefaultAsync(p => p.Id == id);
-        } 
+        }
         public async Task<ProductViewModel> Find(string id)
         {
-            Product product =  await FindProduct(id);
-            return  product.To<ProductViewModel>();
+            Product product = await FindProduct(id);
+            return product.To<ProductViewModel>();
         }
 
         private bool ProductExists(string id)
