@@ -27,13 +27,16 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.UserName)
                 </td>
-                <th>
+                <td>
                     @Html.DisplayFor(modelItem => item.RoleName)
-                </th>
+                </td>
 
                 <td>
                     <a asp-controller="Administration" asp-action="EditUserRole" asp-route-userId="@item.UserId" asp-route-roleId="@item.RoleId">Edit role</a>
-                    <a asp-controller="Administration" asp-action="DeleteUser" asp-route-userId="@item.UserId">Delete</a>
+                </td>
+
+                <td>
+                <a asp-controller="Administration" asp-action="DeleteUser" asp-route-userId="@item.UserId">Delete</a>
                 </td>
             </tr>
         }

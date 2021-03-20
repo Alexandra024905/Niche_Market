@@ -13,7 +13,7 @@ namespace NicheMarket.Web.Models.BindingModels
         public string Adress { get; set; }
         public string ClientName { get; set; }
         public decimal TotalPrice { get; set; }
-        public List<string> Products { get; set; } //Product id
+        public List<string> Products { get; set; } 
         public bool IsCompleted { get; set; }
     }
 }

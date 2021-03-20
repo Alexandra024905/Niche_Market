@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NicheMarket.Services;
+using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,31 +11,31 @@ using System.Threading.Tasks;
 namespace NicheMarket.Web.Controllers
 {
 
-     [Authorize(Roles = "Admin")]
+    [Authorize(Roles = "Admin")]
     public class AdministrationController : Controller
     {
         private readonly RoleManager<IdentityRole> roleManager;
-       
+
         private readonly IProductService productService;
         private readonly IUserService userService;
-      
+        private readonly ICategoryService categoryService;
 
-        public AdministrationController(RoleManager<IdentityRole> roleManager, IProductService productService, IUserService userService)
+        public AdministrationController(RoleManager<IdentityRole> roleManager, IProductService productService, IUserService userService, ICategoryService categoryService)
         {
             this.roleManager = roleManager;
             this.productService = productService;
             this.userService = userService;
+            this.categoryService = categoryService;
         }
 
         [HttpGet]
         public IActionResult CreateRole()
         {
             return View();
-        }       
+        }
 
-        //add Delete,Edit role
         [HttpPost("/Administration/CreateRole")]
-        public async Task<IActionResult> CreateRole (CreateRoleViewModel createRoleViewModel)
+        public async Task<IActionResult> CreateRole(CreateRoleViewModel createRoleViewModel)
         {
             if (ModelState.IsValid)
             {
@@ -49,7 +50,7 @@ namespace NicheMarket.Web.Controllers
                     return RedirectToAction("index", "home");
                 }
 
-                foreach(IdentityError error in identityResult.Errors)
+                foreach (IdentityError error in identityResult.Errors)
                 {
                     ModelState.AddModelError("", error.Description);
                 }
@@ -60,7 +61,7 @@ namespace NicheMarket.Web.Controllers
 
         public async Task<IActionResult> Products()
         {
-            return View( await productService.AllProducts());
+            return View(await productService.AllProducts());
         }
 
 
@@ -78,8 +79,8 @@ namespace NicheMarket.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> EditUserRole(UserRoleViewModel userRoleViewModel)
         {
-           await userService.EditUserRole(userRoleViewModel);
-            return Redirect ("/Administration/Users");
+            await userService.EditUserRole(userRoleViewModel);
+            return Redirect("/Administration/Users");
         }
 
         [HttpGet]
@@ -87,6 +88,42 @@ namespace NicheMarket.Web.Controllers
         {
             await userService.DeleteUser(userId);
             return Redirect("/Administration/Users");
+        }
+
+        public async Task<IActionResult> Categories()
+        {
+            return View(await categoryService.AllCategories());
+        }
+
+        [HttpGet]
+        public IActionResult CreateCategory()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateCategory(CreateCategoryModel newCategory)
+        {
+            await categoryService.CreateCategory(newCategory);
+            return Redirect("/Administration/Categories");
+        }
+
+        [HttpGet]
+        public async  Task<IActionResult> EditCategory(string id)
+        {
+            return View(await  categoryService.FindCategory(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditCategory(CategoryViewModel newCategory)
+        {
+            await categoryService.EditCategory(newCategory);
+            return Redirect("/Administration/Categories");
+        }
+        public async Task<IActionResult> DeleteCategory(string id)
+        {
+            await categoryService.DeleteCategory(id);
+            return Redirect("/Administration/Categories");
         }
     }
 }

@@ -43,6 +43,7 @@ namespace NicheMarket.Web
             services.AddTransient<IUserService, UserService>();
             services.AddTransient<IRetailerService, RetailerService>();
             services.AddTransient<IOrderService, OrderService>();
+            services.AddTransient<ICategoryService, CategoryService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();
@@ -61,6 +62,7 @@ namespace NicheMarket.Web
                 typeof(ProductViewModel).Assembly.GetTypes(),
                 typeof(ProductServiceModel).Assembly.GetTypes(),
                 typeof(Product).Assembly.GetTypes(),
+                typeof(Category).Assembly.GetTypes(),
                 typeof(Order).Assembly.GetTypes(),
                 typeof(CreateOrderBindingModel).Assembly.GetTypes(),
                 typeof(OrderServiceModel).Assembly.GetTypes(),
