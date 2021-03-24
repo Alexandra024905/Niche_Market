@@ -1,5 +1,4 @@
 using AutoMapperConfiguration;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -9,13 +8,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NicheMarket.Data;
 using NicheMarket.Data.Models;
-using NicheMarket.Data.Models.Users;
 using NicheMarket.Services;
 using NicheMarket.Services.Models;
 using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace NicheMarket.Web
@@ -44,6 +41,7 @@ namespace NicheMarket.Web
             services.AddTransient<IRetailerService, RetailerService>();
             services.AddTransient<IOrderService, OrderService>();
             services.AddTransient<ICategoryService, CategoryService>();
+            services.AddTransient<IShoppingCartService, ShoppingCartService>();
 
             services.AddControllersWithViews();
             services.AddRazorPages();

@@ -1,4 +1,5 @@
 ﻿using AutoMapperConfiguration;
+using Microsoft.EntityFrameworkCore;
 using NicheMarket.Data;
 using NicheMarket.Data.Models;
 using NicheMarket.Web.Models.BindingModels;
@@ -23,7 +24,7 @@ namespace NicheMarket.Services
 
         public async Task<IEnumerable<CategoryViewModel>> AllCategories()
         {
-            IEnumerable<CategoryViewModel> categories = dBContext.Category.Select(c=>  c.To<CategoryViewModel>());
+            IEnumerable<CategoryViewModel> categories = await dBContext.Category.Select(c=> c.To<CategoryViewModel>()).ToArrayAsync();
             return  categories;
         }
         public async Task<bool> CreateCategory(CreateCategoryModel newCategory)

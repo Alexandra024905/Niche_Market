@@ -34,7 +34,6 @@ namespace NicheMarket.Services
                 {
                     RoleId = item.RoleId,
                     UserId = item.UserId,
-                    //UserName = FindUser(item.UserId).UserName,
                     UserName = (await dBContext.Users.FindAsync(item.UserId)).UserName,
                     RoleName = FindRoleName(item.RoleId)
                 });

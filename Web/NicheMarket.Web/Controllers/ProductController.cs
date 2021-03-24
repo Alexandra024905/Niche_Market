@@ -8,6 +8,7 @@ using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -19,10 +20,12 @@ namespace NicheMarket.Web.Controllers
     {
         private readonly ICloudinaryService cloudinaryService;
         private readonly IProductService productService;
-        public ProductController(ICloudinaryService cloudinaryService, IProductService productService)
+        private readonly ICategoryService categoryService;
+        public ProductController(ICloudinaryService cloudinaryService, IProductService productService, ICategoryService categoryService)
         {
             this.cloudinaryService = cloudinaryService;
             this.productService = productService;
+            this.categoryService = categoryService;
         }
 
 
@@ -31,8 +34,7 @@ namespace NicheMarket.Web.Controllers
         {
             return View(await productService.AllProducts());
         }
-
-
+     
         [HttpGet]
         [Route("Product/Create/{id?}")]
         public IActionResult Create()
