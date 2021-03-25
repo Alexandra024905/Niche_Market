@@ -10,7 +10,13 @@ namespace NicheMarket.Services
 {
     public interface IShoppingCartService
     {
-        public Task<Dictionary<string, List<ShoppingCartItem>>> AddRetailerIdToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel);
-        public Task<bool> AddProductToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel);
+        public Task<Dictionary<string, List<ShoppingCartItem>>> AddRetailerIdToCart(Dictionary<string, List<ShoppingCartItem>> cart, string id);
+        public Task<Dictionary<string, List<ShoppingCartItem>>> AddProductToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel);
+        public Task<Dictionary<string, List<ShoppingCartItem>>> RemoveProduct(Dictionary<string, List<ShoppingCartItem>> cart, string id);
+        public Task<Dictionary<string, List<ShoppingCartItem>>> Increase(Dictionary<string, List<ShoppingCartItem>> cart, string id);
+        public Task<Dictionary<string, List<ShoppingCartItem>>> Decrease(Dictionary<string, List<ShoppingCartItem>> cart, string id);
+        public Task<double> Total(Dictionary<string, List<ShoppingCartItem>> cart);
+
+        //public Task<ProductViewModel> Find(string id);
     }
 }

@@ -26,7 +26,7 @@
                     </div>
                 </div>
 
-                @foreach (var cartItemList in ViewBag.cart)
+                @foreach (var cartItemList in ViewBag.cart.Values)
                 {
                     <div class="row border-top border-bottom">
                         <div class="row main align-items-center">
@@ -46,7 +46,7 @@
                                             <div class="col">&euro;@cartItem.Product.Price </div>
                                         </div>
                                         <div class="col">
-                                            <a class="close" asp-controller="Cart" asp-action="Remove" asp-route-id="@cartItem" color="#fff"> &#10005;</a>
+                                            <a class="close" asp-controller="Cart" asp-action="Remove" asp-route-id="@cartItem.Product.Id" color="#fff"> &#10005;</a>
                                         </div>
                                     </div>
                                 </div>
@@ -65,7 +65,7 @@
                 <hr>
                 <div class="row" style="padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">&euro; @ViewBag.total</div>
+                    <div class="col text-right">&euro;@ViewBag.total</div>
                 </div> <a class="btn btn-primary" href="/client/placeOrder?id=@ViewBag.cart">Place order</a>
             </div>
 

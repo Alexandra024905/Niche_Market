@@ -20,26 +20,32 @@ namespace NicheMarket.Services
             this.dBContext = dBContext;
         }
 
-        public async Task<Dictionary<string, List<ShoppingCartItem>>> AddRetailerIdToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel)
+        public async Task<Dictionary<string, List<ShoppingCartItem>>> AddRetailerIdToCart(Dictionary<string, List<ShoppingCartItem>> cart, string id)
         {
-            if (cart.ContainsKey(productViewModel.RetailerId))
+            ProductViewModel productViewModel = await Find(id);
+            if (cart == null)
             {
-                await AddProductToCart(cart, productViewModel);
+                cart = new Dictionary<string, List<ShoppingCartItem>>();
+                cart.Add(productViewModel.RetailerId, new List<ShoppingCartItem>() { new ShoppingCartItem { Product = productViewModel, Quantity = 1 } });
+                return cart;
+            }
+            else if (cart.ContainsKey(productViewModel.RetailerId))
+            {
+                return await AddProductToCart(cart, productViewModel);
             }
             else
             {
                 cart.Add(productViewModel.RetailerId, new List<ShoppingCartItem>());
                 cart[productViewModel.RetailerId].Add(new ShoppingCartItem { Product = productViewModel, Quantity = 1 });
+                return cart;
             }
-
-            return cart;
         }
-        public async Task<bool> AddProductToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel)
+        public async Task<Dictionary<string, List<ShoppingCartItem>>> AddProductToCart(Dictionary<string, List<ShoppingCartItem>> cart, ProductViewModel productViewModel)
         {
             bool exists = false;
             foreach (var item in cart[productViewModel.RetailerId])
             {
-                if (item.Product == productViewModel)
+                if (item.Product.Id == productViewModel.Id)
                 {
                     item.Quantity++;
                     exists = true;
@@ -49,14 +55,74 @@ namespace NicheMarket.Services
             {
                 cart[productViewModel.RetailerId].Add(new ShoppingCartItem { Product = productViewModel, Quantity = 1 });
             }
-            return exists;
+            return cart;
         }
+
+        public async Task<Dictionary<string, List<ShoppingCartItem>>> RemoveProduct(Dictionary<string, List<ShoppingCartItem>> cart, string id)
+        {
+            ProductViewModel productViewModel = await Find(id);
+            foreach (var item in cart[productViewModel.RetailerId])
+            {
+                if (item.Product.Id == productViewModel.Id)
+                {
+                    cart[productViewModel.RetailerId].Remove(item);
+                    break;
+                }
+            }
+            return cart;
+        }
+
+        public async Task<Dictionary<string, List<ShoppingCartItem>>> Decrease(Dictionary<string, List<ShoppingCartItem>> cart, string id)
+        {
+            ProductViewModel productViewModel = await Find(id);
+            foreach (var item in cart[productViewModel.RetailerId])
+            {
+                if (item.Product.Id == productViewModel.Id)
+                {
+                    if (item.Quantity == 1)
+                    {
+                        cart[productViewModel.RetailerId].Remove(item);
+                        break;
+                    }
+                    else
+                    {
+                        item.Quantity--;
+                    }
+                }
+            }
+            return cart;
+        }
+        public async Task<Dictionary<string, List<ShoppingCartItem>>> Increase(Dictionary<string, List<ShoppingCartItem>> cart, string id)
+        {
+            ProductViewModel productViewModel = await Find(id);
+            foreach (var item in cart[productViewModel.RetailerId])
+            {
+                if (item.Product.Id == productViewModel.Id)
+                {
+                    item.Quantity++;
+                }
+            }
+            return cart;
+        }
+
+
+        public async Task<double> Total(Dictionary<string, List<ShoppingCartItem>> cart)
+        {
+            double sum = 0;
+            foreach (var list in cart.Values)
+            {
+                foreach (var item in list)
+                {
+                    sum += (double)item.Product.Price*item.Quantity;
+                }
+            }
+            return sum;
+        }
+
         public async Task<ProductViewModel> Find(string id)
         {
             Product product = await dBContext.Products.FindAsync(id);
             return product.To<ProductViewModel>();
         }
-
-
     }
 }
