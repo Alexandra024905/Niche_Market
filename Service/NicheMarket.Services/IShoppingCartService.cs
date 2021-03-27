@@ -16,7 +16,5 @@ namespace NicheMarket.Services
         public Task<Dictionary<string, List<ShoppingCartItem>>> Increase(Dictionary<string, List<ShoppingCartItem>> cart, string id);
         public Task<Dictionary<string, List<ShoppingCartItem>>> Decrease(Dictionary<string, List<ShoppingCartItem>> cart, string id);
         public Task<double> Total(Dictionary<string, List<ShoppingCartItem>> cart);
-
-        //public Task<ProductViewModel> Find(string id);
     }
 }

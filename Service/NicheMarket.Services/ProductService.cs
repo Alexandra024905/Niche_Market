@@ -54,7 +54,7 @@ namespace NicheMarket.Services
             bool result = false;
             if (id != null)
             {
-                if (ProductExists(id))
+                if (await ProductExists(id))
                 {
                     Product product = await FindProduct(id);
                     dBContext.Products.Remove(product);
@@ -83,7 +83,7 @@ namespace NicheMarket.Services
             bool result = false;
             if (productServiceModel.Id != null)
             {
-                if (ProductExists(productServiceModel.Id))
+                if (await ProductExists(productServiceModel.Id))
                 {
                     Product product = await FindProduct(productServiceModel.Id);
                     product.Price = productServiceModel.Price;
@@ -92,7 +92,7 @@ namespace NicheMarket.Services
                     //product.Type = productServiceModel.Type;
                     if (productServiceModel.ImageURL != null)
                     {
-                    product.ImageURL = productServiceModel.ImageURL;
+                        product.ImageURL = productServiceModel.ImageURL;
                     }
                     dBContext.Products.Update(product);
                     dBContext.SaveChanges();
@@ -112,9 +112,9 @@ namespace NicheMarket.Services
             return product.To<ProductViewModel>();
         }
 
-        private bool ProductExists(string id)
+        private async Task<bool> ProductExists(string id)
         {
-            return dBContext.Products.Any(e => e.Id == id);
+            return await dBContext.Products.AnyAsync(e => e.Id == id);
         }
     }
 }

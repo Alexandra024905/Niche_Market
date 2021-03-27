@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NicheMarket.Data;
 using NicheMarket.Data.Models;
 using NicheMarket.Services.Models;
+using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -18,26 +19,25 @@ namespace NicheMarket.Services
         {
             this.dBContext = dBContext;
         }
-        public async Task<bool> CreateOrder(OrderServiceModel orderServiceModel)
+        public async Task<bool> CreateOrder(Dictionary<string, List<ShoppingCartItem>> cart, OrderServiceModel orderServiceModel)
         {
-            Order newOrder = new Order
+            foreach (var retailerId in cart.Keys)
             {
-                Id = Guid.NewGuid().ToString(),
-                Adress = orderServiceModel.Adress,
-                ClientName = orderServiceModel.ClientName,
-                ClientId = orderServiceModel.ClientId,
-                IsCompleted = false,
-                Products = GetMyProducts(orderServiceModel.Products)
-            };
-            Product firstProduct = newOrder.Products.FirstOrDefault();
-            if (firstProduct != null)
-            {
-                newOrder.RetailerId = firstProduct.RetailerId;
-                newOrder.TotalPrice = CalculateTotalPrice(newOrder.Products);
+                Order newOrder = new Order
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    RetailerId = retailerId,
+                    Adress = orderServiceModel.Adress,
+                    ClientName = orderServiceModel.ClientName,
+                    ClientId = orderServiceModel.ClientId,
+                    IsCompleted = false,
+                    Products = await GetMyProducts(cart, retailerId),
+                    TotalPrice = CalculateTotalPrice(cart, retailerId)
+                };
+                bool result = await this.dBContext.AddAsync(newOrder) != null;
             }
-            bool result = await this.dBContext.AddAsync(newOrder) != null;
             await this.dBContext.SaveChangesAsync();
-            return result;
+            return true;
         }
 
         public async Task<List<OrderViewModel>> MyOrders(string clinetId)
@@ -55,39 +55,37 @@ namespace NicheMarket.Services
             bool result = false;
             if (id != null)
             {
-                //Order orderToRemove = await dBContext.FindAsync<Order>(id);
-                Order orderToRemove = await dBContext.Orders.Include(p=>p.Products).FirstOrDefaultAsync();
+                Order orderToRemove = await dBContext.Orders.Include(p => p.Products).FirstOrDefaultAsync();
                 orderToRemove.Products.Clear();
                 dBContext.Orders.Remove(orderToRemove);
                 dBContext.SaveChanges();
                 result = true;
-
             }
             return result;
         }
 
-        private decimal CalculateTotalPrice(List<Product> products)
+        private decimal CalculateTotalPrice(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
         {
             decimal price = 0;
-            foreach (var product in products)
+            foreach (var cartItem in cart[retailerId])
             {
-                price += product.Price;
+                price += cartItem.Product.Price * cartItem.Quantity;
             }
             return price;
         }
-        private List<Product> GetMyProducts(List<string> productsIds)
+        private async Task<List<Product>> GetMyProducts(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
         {
             List<Product> products = new List<Product>();
-            foreach (var id in productsIds)
+            foreach (var cartItem in cart[retailerId])
             {
-                products.Add(dBContext.Products.FirstOrDefault(p => p.Id == id));
+                products.Add(await dBContext.Products.FirstOrDefaultAsync(p => p.Id == cartItem.Product.Id));
             }
             return products;
         }
 
-        private Order FindOrderById(string id)
+        private async Task<Order> FindOrderById(string id)
         {
-            return dBContext.Orders.FirstOrDefault(o => o.Id == id);
+            return await dBContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
         }
     }
 }

@@ -38,21 +38,17 @@ namespace NicheMarket.Web.Controllers
         {
             OrderServiceModel orderServiceModel = createOrderBindingModel.To<OrderServiceModel>();
             orderServiceModel.ClientId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            List<ShoppingCartItem> cart = SessionHelper.GetObjectFromJson<List<ShoppingCartItem>>(HttpContext.Session, "cart");
-            foreach (var item in cart)
-            {
-                orderServiceModel.Products.Add(item.Product.Id);
-            }
-            bool result = await orderService.CreateOrder(orderServiceModel);
-            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", new List<ShoppingCartItem>());
+            Dictionary<string, List<ShoppingCartItem>> cart = SessionHelper.GetObjectFromJson<Dictionary<string, List<ShoppingCartItem>>>(HttpContext.Session, "cart");
+            bool result = await orderService.CreateOrder(cart, orderServiceModel);
+            SessionHelper.SetObjectAsJson(HttpContext.Session, "cart", new Dictionary<string, List<ShoppingCartItem>>());
             return Redirect("MyOrders");
         }
 
         public async Task<IActionResult> MyOrders()
         {
             return View(await orderService.MyOrders(User.FindFirstValue(ClaimTypes.NameIdentifier)));
-        }      
-        
+        }
+
         public async Task<IActionResult> DeleteOrder(string orderId)
         {
             await orderService.DeleteOrder(orderId);

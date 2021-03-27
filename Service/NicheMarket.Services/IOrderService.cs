@@ -11,7 +11,7 @@ namespace NicheMarket.Services
 {
     public interface IOrderService
     {
-        Task<bool> CreateOrder(OrderServiceModel orderServiceModel);
+        Task<bool> CreateOrder(Dictionary<string, List<ShoppingCartItem>> cart, OrderServiceModel orderServiceModel);
         Task<List<OrderViewModel>> MyOrders(string clinetId);
         Task<bool> DeleteOrder(string id);
     }
