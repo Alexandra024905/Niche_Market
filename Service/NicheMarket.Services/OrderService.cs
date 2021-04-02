@@ -87,5 +87,30 @@ namespace NicheMarket.Services
         {
             return await dBContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
         }
+
+        public async Task<OrderViewModel> DetailsOrder(string id)
+        {
+            Order order = await dBContext.Orders.Include("Products").FirstOrDefaultAsync(o => o.Id == id);
+            OrderViewModel orderViewModel = new OrderViewModel
+            {
+                Id = order.Id,
+                ClientName = order.ClientName,
+                Adress = order.Adress,
+                TotalPrice = order.TotalPrice,
+                IsCompleted = order.IsCompleted,
+                Products = FindProducts(order.Products)
+            };
+            return orderViewModel;
+        }
+
+        public List<ProductViewModel> FindProducts(List<Product> products)
+        {
+            var productsViews = new List<ProductViewModel>();
+            foreach (var product in products)
+            {
+                productsViews.Add(product.To<ProductViewModel>());
+            }
+            return productsViews;
+        }
     }
 }

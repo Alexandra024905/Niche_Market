@@ -14,7 +14,7 @@ namespace NicheMarket.Web.Models.ViewModels
         public string Adress { get; set; }
         public string ClientName { get; set; }
         public decimal TotalPrice { get; set; }
-        public List<string> Products { get; set; } 
+        public List<ProductViewModel> Products { get; set; } 
         public bool IsCompleted { get; set; }
 
 

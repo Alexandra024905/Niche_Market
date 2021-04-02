@@ -19,37 +19,45 @@
             <th>
                 Status
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalPrice)
+            </th>
+            <th> Details </th>
+            <th>Delete</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
 
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ClientName)
-                </td>
-                <th>
-                    @Html.DisplayFor(modelItem => item.Adress)
-                </th>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ClientName)
+            </td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Adress)
+            </th>
 
-                <th>
-                    @if (@item.IsCompleted)
-                    {
-                        <label>Completed</label>
-                    }
-                    else
-                    {
-                        <label>Pending</label>
-                    }
+            <td>
+                @if (@item.IsCompleted)
+                {
+                    <label>Completed</label>
+                }
+                else
+                {
+                    <label>Pending</label>
+                }
 
-                </th>
-
-                <td>
-                    <a asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Cancel</a>
-                </td>
-            </tr>
+            </td>
+            <td>
+                @Html.DisplayNameFor(modelItem => item.TotalPrice)
+            </td>  
+            <td>
+                <a class="btn btn-primary" asp-controller="Client" asp-action="OrderDetails" asp-route-orderId="@item.Id">Cancel</a>
+            </td>
+            <td>
+                <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Cancel</a>
+        </tr>
         }
     </tbody>
 </table>

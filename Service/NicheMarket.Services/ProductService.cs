@@ -89,7 +89,7 @@ namespace NicheMarket.Services
                     product.Price = productServiceModel.Price;
                     product.Title = productServiceModel.Title;
                     product.Description = productServiceModel.Description;
-                    //product.Type = productServiceModel.Type;
+                    //product.Type = Categories(productServiceModel.Type);
                     if (productServiceModel.ImageURL != null)
                     {
                         product.ImageURL = productServiceModel.ImageURL;
@@ -110,6 +110,16 @@ namespace NicheMarket.Services
         {
             Product product = await FindProduct(id);
             return product.To<ProductViewModel>();
+        }
+
+        public  List<Category> Categories(List<string> categoriesNames)
+        {
+            List<Category> categories = new List<Category>();
+            foreach (var categorie in categoriesNames)
+            {
+                categories.Add( dBContext.Category.Where(c => c.Name == categorie).FirstOrDefault());
+            }
+            return categories;
         }
 
         private async Task<bool> ProductExists(string id)

@@ -3,13 +3,9 @@
 
 
 @{
-    ViewData["Title"] = "Create";
+    var product = ViewBag.Product;
 }
 
-<h1>Create</h1>
-
-<h4>Product</h4>
-<hr />
 <div class="row">
     <div class="col-md-4">
         <form enctype="multipart/form-data" asp-action="Create">
@@ -22,7 +18,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <input asp-for= "Price" class="form-control" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -30,6 +26,7 @@
                 <div class="custom-file">
                     <input asp-for="FileUpload" class="form-control custom-file-input" />
                     <label class="custom-file-label">Select image:</label>
+
                 </div>
             </div>
             <div class="form-group">
@@ -39,7 +36,14 @@
 
             </div>
             <div>
-                @*<asp:DropDownList*@
+                <p>
+                    Select Category:
+                    <asp:DropDownList ID="Categories" runat="server" DataSourceID="CategoriesData"
+                                      DataTextField="CategoryId" DataValueField="CategoryName" AutoPostBack="true" />
+                    <asp:SqlDataSource ID="CategoriesData" runat="server"
+                                       ConnectionString="<%$ ConnectionStrings:NorthwindConnectionString %>"
+                                       SelectCommand="SELECT [CategoryId], [CategoryName] FROM [Categories]"></asp:SqlDataSource>
+                </p>
             </div>
             <div>
                 <div class="dropdown">
@@ -50,6 +54,15 @@
                     </select>
                 </div>
             </div>
+            @*<div>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
+                    <label class="btn btn-outline-primary" for="btn-check-outlined">@category.Name</label><br>
+
+                }
+            </div>*@
+
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />
@@ -61,30 +74,3 @@
         </form>
     </div>
 </div>
-
-
-
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-
-
-    <script>
-        $(document).ready(function () {
-            $('.custom-file-input').on('change', function () {
-                var fileName = $(this).val().split("\\").pop();
-                $(this).next('.custom-file-label').html(fileName);
-            })
-        });
-
-        $(document).ready(function () {
-            $('#ingredients').multiselect();
-        });
-    </script>
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-
-}
-

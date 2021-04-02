@@ -55,6 +55,9 @@ namespace NicheMarket.Web.Controllers
             return Redirect("/");
         }
 
-
+        public async Task<IActionResult> OrderDetails(string orderId)
+        {
+            return View(await orderService.DetailsOrder(orderId));
+        }
     }
 }

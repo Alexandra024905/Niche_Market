@@ -12,7 +12,7 @@ namespace NicheMarket.Web.Models.BindingModels
         public string Title { get; set; }
         public IFormFile Image { get; set; }
 
-        public string Type { get; set; }
+        public List<string> Type { get; set; }
 
         public string Description { get; set; }
 

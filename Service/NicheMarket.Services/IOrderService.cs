@@ -13,6 +13,7 @@ namespace NicheMarket.Services
     {
         Task<bool> CreateOrder(Dictionary<string, List<ShoppingCartItem>> cart, OrderServiceModel orderServiceModel);
         Task<List<OrderViewModel>> MyOrders(string clinetId);
+        Task<OrderViewModel> DetailsOrder(string id);
         Task<bool> DeleteOrder(string id);
     }
 }

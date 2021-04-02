@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace NicheMarket.Web.Controllers
 {
- 
+
     public class ProductController : Controller
     {
         private readonly ICloudinaryService cloudinaryService;
@@ -34,11 +34,13 @@ namespace NicheMarket.Web.Controllers
         {
             return View(await productService.AllProducts());
         }
-     
+
         [HttpGet]
         [Route("Product/Create/{id?}")]
         public IActionResult Create()
         {
+            ViewData["Categories"] = categoryService.AllCategories();
+            ViewData["Product"] = new CreateProductBindingModel();
             return View();
         }
 
