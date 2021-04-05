@@ -16,6 +16,7 @@ namespace NicheMarket.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Category> Category { get; set; }
         public DbSet<Comment> Comments { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
         public NicheMarketDBContext(DbContextOptions<NicheMarketDBContext> options)
             : base(options)
         {

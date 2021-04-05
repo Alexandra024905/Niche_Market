@@ -21,7 +21,7 @@ namespace NicheMarket.Data.Models
 
         [Column(TypeName = "decimal(28, 20)")]
         public decimal TotalPrice { get; set; }
-        public List<Product> Products { get; set; }
+        public List<OrderItem> Products { get; set; }
         public bool IsCompleted { get; set; }
     }
 }

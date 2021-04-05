@@ -32,7 +32,7 @@ namespace NicheMarket.Services
                     ClientId = orderServiceModel.ClientId,
                     IsCompleted = false,
                     Products = await GetMyProducts(cart, retailerId),
-                    TotalPrice = CalculateTotalPrice(cart, retailerId)
+                    TotalPrice = await CalculateTotalPrice(cart, retailerId)
                 };
                 bool result = await this.dBContext.AddAsync(newOrder) != null;
             }
@@ -64,7 +64,21 @@ namespace NicheMarket.Services
             return result;
         }
 
-        private decimal CalculateTotalPrice(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
+        public async Task<OrderViewModel> DetailsOrder(string id)
+        {
+            Order order = await dBContext.Orders.Where(o => o.Id == id).Include(o => o.Products).FirstOrDefaultAsync();
+            OrderViewModel orderViewModel = new OrderViewModel
+            {
+                Id = order.Id,
+                ClientName = order.ClientName,
+                Adress = order.Adress,
+                TotalPrice = order.TotalPrice,
+                IsCompleted = order.IsCompleted,
+                Products = await  FindProducts(order.Products)
+            };
+            return orderViewModel;
+        }
+        private async Task<decimal> CalculateTotalPrice(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
         {
             decimal price = 0;
             foreach (var cartItem in cart[retailerId])
@@ -73,42 +87,35 @@ namespace NicheMarket.Services
             }
             return price;
         }
-        private async Task<List<Product>> GetMyProducts(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
+        private async Task<List<OrderItem>> GetMyProducts(Dictionary<string, List<ShoppingCartItem>> cart, string retailerId)
         {
-            List<Product> products = new List<Product>();
+            List<OrderItem> products = new List<OrderItem>();
             foreach (var cartItem in cart[retailerId])
             {
-                products.Add(await dBContext.Products.FirstOrDefaultAsync(p => p.Id == cartItem.Product.Id));
+                OrderItem orderItem = new OrderItem
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ProductId = cartItem.Product.Id,
+                    Quantity = cartItem.Quantity
+                };
+                await dBContext.OrderItems.AddAsync(orderItem);
+                dBContext.SaveChanges();
+                products.Add(orderItem);
             }
             return products;
         }
 
-        private async Task<Order> FindOrderById(string id)
-        {
-            return await dBContext.Orders.FirstOrDefaultAsync(o => o.Id == id);
-        }
-
-        public async Task<OrderViewModel> DetailsOrder(string id)
-        {
-            Order order = await dBContext.Orders.Include("Products").FirstOrDefaultAsync(o => o.Id == id);
-            OrderViewModel orderViewModel = new OrderViewModel
-            {
-                Id = order.Id,
-                ClientName = order.ClientName,
-                Adress = order.Adress,
-                TotalPrice = order.TotalPrice,
-                IsCompleted = order.IsCompleted,
-                Products = FindProducts(order.Products)
-            };
-            return orderViewModel;
-        }
-
-        public List<ProductViewModel> FindProducts(List<Product> products)
+        public async Task<List<ProductViewModel>> FindProducts(List<OrderItem> orderItems)
         {
             var productsViews = new List<ProductViewModel>();
-            foreach (var product in products)
+            foreach (var orderItem in orderItems)
             {
-                productsViews.Add(product.To<ProductViewModel>());
+                int quantity = orderItem.Quantity;
+                while (quantity > 0)
+                {
+                    productsViews.Add(dBContext.Products.Find(orderItem.ProductId).To<ProductViewModel>());
+                    quantity--;
+                }
             }
             return productsViews;
         }

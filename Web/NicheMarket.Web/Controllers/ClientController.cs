@@ -26,7 +26,6 @@ namespace NicheMarket.Web.Controllers
             return View();
         }
 
-        //Add shopping cart
         [HttpGet]
         public IActionResult PlaceOrder()
         {

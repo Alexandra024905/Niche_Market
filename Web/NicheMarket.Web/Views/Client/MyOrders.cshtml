@@ -50,10 +50,10 @@
 
             </td>
             <td>
-                @Html.DisplayNameFor(modelItem => item.TotalPrice)
+                @Html.DisplayFor(modelItem => item.TotalPrice)
             </td>  
             <td>
-                <a class="btn btn-primary" asp-controller="Client" asp-action="OrderDetails" asp-route-orderId="@item.Id">Cancel</a>
+                <a class="btn btn-primary" asp-controller="Client" asp-action="OrderDetails" asp-route-orderId="@item.Id">Details</a>
             </td>
             <td>
                 <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@item.Id">Cancel</a>
