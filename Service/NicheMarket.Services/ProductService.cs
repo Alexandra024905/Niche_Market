@@ -56,9 +56,9 @@ namespace NicheMarket.Services
             {
                 if (await ProductExists(id))
                 {
-                    Product product = await FindProduct(id);
-                    dBContext.Products.Remove(product);
-                    dBContext.SaveChanges();
+                    Product product = dBContext.Products.Find(id);
+
+                    await DeleteProductFromAllOrders(product);
                     result = true;
                 }
             }
@@ -89,7 +89,7 @@ namespace NicheMarket.Services
                     product.Price = productServiceModel.Price;
                     product.Title = productServiceModel.Title;
                     product.Description = productServiceModel.Description;
-                    //product.Type = Categories(productServiceModel.Type);
+                    product.Type = productServiceModel.Type;
                     if (productServiceModel.ImageURL != null)
                     {
                         product.ImageURL = productServiceModel.ImageURL;
@@ -112,12 +112,12 @@ namespace NicheMarket.Services
             return product.To<ProductViewModel>();
         }
 
-        public  List<Category> Categories(List<string> categoriesNames)
+        public List<Category> ProductCategories(List<string> categoriesNames)
         {
             List<Category> categories = new List<Category>();
             foreach (var categorie in categoriesNames)
             {
-                categories.Add( dBContext.Category.Where(c => c.Name == categorie).FirstOrDefault());
+                categories.Add(dBContext.Category.Where(c => c.Name == categorie).FirstOrDefault());
             }
             return categories;
         }
@@ -125,6 +125,48 @@ namespace NicheMarket.Services
         private async Task<bool> ProductExists(string id)
         {
             return await dBContext.Products.AnyAsync(e => e.Id == id);
+        }
+
+        private async Task<bool> DeleteProductFromAllOrders(Product productToRemove)
+        {
+            foreach (var orderItem in dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id))
+            {
+                IEnumerable<Order> orders = dBContext.Orders.Include("Products").Where(o => o.Products.Contains(orderItem));
+                await EditOrdersWithOrderItem(orders, orderItem);
+                dBContext.Remove(orderItem);
+            }
+            dBContext.OrderItems.RemoveRange(dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id));
+            bool result = dBContext.Products.Remove(productToRemove)!=null;
+            dBContext.SaveChanges();
+            return result;
+        }
+
+        private async Task<bool> EditOrdersWithOrderItem(IEnumerable<Order> orders, OrderItem orderItem)
+        {
+            foreach (var order in orders)
+            {
+                order.Products.Remove(orderItem);
+                if (order.Products.Count > 0)
+                {
+                    order.TotalPrice = await CalculateNewPrice(order);
+                }
+                else
+                {
+                    dBContext.Orders.Remove(order);
+                }
+            }
+            return true;
+        }
+
+        private async Task<decimal> CalculateNewPrice(Order order)
+        {
+            decimal price = 0;
+            foreach (var orderItem in order.Products)
+            {
+                Product product = await dBContext.Products.FindAsync(orderItem.ProductId);
+                price += product.Price * orderItem.Quantity;
+            }
+            return price;
         }
     }
 }

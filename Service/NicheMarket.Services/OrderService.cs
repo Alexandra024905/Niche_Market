@@ -107,17 +107,18 @@ namespace NicheMarket.Services
 
         public async Task<List<ProductViewModel>> FindProducts(List<OrderItem> orderItems)
         {
-            var productsViews = new List<ProductViewModel>();
+            List<ProductViewModel> products = new List<ProductViewModel>();
             foreach (var orderItem in orderItems)
             {
                 int quantity = orderItem.Quantity;
                 while (quantity > 0)
                 {
-                    productsViews.Add(dBContext.Products.Find(orderItem.ProductId).To<ProductViewModel>());
+                    Product product = await dBContext.Products.FindAsync(orderItem.ProductId);
+                    products.Add(product.To<ProductViewModel>());
                     quantity--;
                 }
             }
-            return productsViews;
+            return products;
         }
     }
 }

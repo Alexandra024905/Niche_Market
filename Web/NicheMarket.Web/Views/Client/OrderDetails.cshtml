@@ -51,22 +51,26 @@
             </div>
         </div>
 
-        @foreach (var product in @Model.Products)
-        {
-            <div class="row border-top border-bottom">
-                <div class="row main align-items-center">
-                    <div class="col-2"><img class="img-fluid" src="@Url.Content(product.ImageURL)"  asp-append-version="true" width: 3.5rem /></div>
+            @foreach (var product in @Model.Products)
+            {
+                if (true)
+                {
 
-                    <div class="col">
-                        <div class="row">@product.Title</div>
-                        <div class="row text-muted">@product.Type</div>
-                    </div>
-                    <div class="col">
-                        <div class="col">&euro;@product.Price </div>
+                }
+                <div class="row border-top border-bottom">
+                    <div class="row main align-items-center">
+                        <div class="col-2"><img class="img-fluid" src="@Url.Content(product.ImageURL)" asp-append-version="true" width: 3.5rem /></div>
+
+                        <div class="col">
+                            <div class="row">@product.Title</div>
+                            <div class="row text-muted">@product.Type</div>
+                        </div>
+                        <div class="col">
+                            <div class="col">&euro;@product.Price </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
     </div>
-</div>  <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@Model.Id">Cancel</a>
+</div>  <a class="btn btn-primary" asp-controller="Client" asp-action="DeleteOrder" asp-route-orderId="@Model.Id">Cancel order</a>
 

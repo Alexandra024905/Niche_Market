@@ -47,7 +47,7 @@ namespace NicheMarket.Services
             {
                 if (item.Product.Id == productViewModel.Id)
                 {
-                    item.Quantity++;
+                     item.Quantity++;
                     exists = true;
                 }
             }
