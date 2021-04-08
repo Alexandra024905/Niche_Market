@@ -25,9 +25,9 @@ namespace NicheMarket.Services
             this.dBContext = dBContext;
         }
 
-        public async Task<List<ProductViewModel>> AllProducts()
+        public async Task<IEnumerable<ProductViewModel>> AllProducts()
         {
-            List<ProductViewModel> products = await dBContext.Products
+            IEnumerable<ProductViewModel> products = await dBContext.Products
                 .Select(p => p.To<ProductViewModel>())
                 .ToListAsync();
 

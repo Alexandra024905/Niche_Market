@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapperConfiguration;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
-using NicheMarket.Web.Models.ViewModels;
 
 namespace NicheMarket.Data.Models.Users
 {
@@ -13,6 +8,7 @@ namespace NicheMarket.Data.Models.Users
     {
         public string Name { get ; set; }
         public string Password { get ; set ; }
+
         public string Address { get ; set ; }
         public string RoleName { get ; set ; }
     }

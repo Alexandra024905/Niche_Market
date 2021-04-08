@@ -35,17 +35,7 @@
                 <span asp-validation-for="Type" class="text-danger"></span>
 
             </div>
-            <div>
-                <p>
-                    Select Category:
-                    <asp:DropDownList ID="Categories" runat="server" DataSourceID="CategoriesData"
-                                      DataTextField="CategoryId" DataValueField="CategoryName" AutoPostBack="true" />
-                    <asp:SqlDataSource ID="CategoriesData" runat="server"
-                                       ConnectionString="<%$ ConnectionStrings:NorthwindConnectionString %>"
-                                       SelectCommand="SELECT [CategoryId], [CategoryName] FROM [Categories]"></asp:SqlDataSource>
-                </p>
-            </div>
-            <div>
+            @*<div>
                 <div class="dropdown">
                     <select class="form-control" id="Type" name="Type">
                         <option>Select Type</option>
@@ -53,16 +43,7 @@
                         <option>Category2</option>
                     </select>
                 </div>
-            </div>
-            @*<div>
-                @foreach (var category in ViewBag.Categories)
-                {
-                    <input type="checkbox" class="btn-check" id="btn-check-outlined" autocomplete="off">
-                    <label class="btn btn-outline-primary" for="btn-check-outlined">@category.Name</label><br>
-
-                }
             </div>*@
-
             <div class="form-group">
                 <label asp-for="Description" class="control-label"></label>
                 <input asp-for="Description" class="form-control" />

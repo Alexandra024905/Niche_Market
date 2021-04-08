@@ -11,8 +11,11 @@ namespace NicheMarket.Data.Models
     {
         [Key]
         public string Id { get; set; }
+        [Required]
         public int Quantity { get; set; }
+        [Required]
         public string ProductId { get; set; }
+        [Required]
         public string OrderId { get; set; }
     }
 }

@@ -25,6 +25,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NicheMarket.Services", "Ser
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoMapperConfiguration", "Common\AutoMapperConfiguration\AutoMapperConfiguration.csproj", "{B61F5ED8-E3C3-4904-A145-4ECEF8E4E77F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{632EE8D0-860D-423A-9CB9-3A8F201AC28B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NicheMarket.Services.Tests", "Tests\NicheMarket.Services.Tests\NicheMarket.Services.Tests.csproj", "{30768B47-A2C3-42C7-AAD3-BA763389F642}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -59,6 +63,10 @@ Global
 		{B61F5ED8-E3C3-4904-A145-4ECEF8E4E77F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B61F5ED8-E3C3-4904-A145-4ECEF8E4E77F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B61F5ED8-E3C3-4904-A145-4ECEF8E4E77F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{30768B47-A2C3-42C7-AAD3-BA763389F642}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{30768B47-A2C3-42C7-AAD3-BA763389F642}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{30768B47-A2C3-42C7-AAD3-BA763389F642}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{30768B47-A2C3-42C7-AAD3-BA763389F642}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -71,6 +79,7 @@ Global
 		{53F9FAC9-6DB3-41EF-9499-CF674AC0E7BE} = {27C26B48-14D2-47DC-864C-5C31468B2B26}
 		{6A5595E9-A7E3-4544-8B82-7764FA5492D1} = {A0FDFB03-EA88-4D1C-BF3E-F5530AFC216B}
 		{B61F5ED8-E3C3-4904-A145-4ECEF8E4E77F} = {D4CD394E-6006-4F4E-9A4D-A9AD802CC312}
+		{30768B47-A2C3-42C7-AAD3-BA763389F642} = {632EE8D0-860D-423A-9CB9-3A8F201AC28B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C8584419-2337-43EE-AE62-5CFAE6E13779}

@@ -14,9 +14,17 @@ namespace NicheMarket.Data.Models
     {
         [Key]
         public string Id { get; set; }
+
+        [Required]
         public string ClientId { get; set; }
+
+        [Required]
         public string RetailerId { get; set; }
+
+        [Required]
         public string Adress { get; set; }
+
+        [Required]
         public string ClientName { get; set; }
 
         [Column(TypeName = "decimal(28, 20)")]
