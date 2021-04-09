@@ -25,6 +25,10 @@ namespace NicheMarket.Services.Tests
         internal static string SetPropertyIncorrectlyErrorMessage(string methodName, string property)
         {
             return $"{methodName} method does not set {property} property correctly.";
+        }  
+        internal static string DoesNotCalculateCorrectlyErrorMessage(string methodName, string property)
+        {
+            return $"{methodName}method does not calculate the value of {property} property correctly.";
         }   
         
         internal static string ReturnsTrueWhenFalseIsExpected(string methodName)

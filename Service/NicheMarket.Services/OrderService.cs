@@ -105,7 +105,7 @@ namespace NicheMarket.Services
             return products;
         }
 
-        public async Task<List<ProductViewModel>> FindProducts(List<OrderItem> orderItems)
+        private async Task<List<ProductViewModel>> FindProducts(List<OrderItem> orderItems)
         {
             List<ProductViewModel> products = new List<ProductViewModel>();
             foreach (var orderItem in orderItems)

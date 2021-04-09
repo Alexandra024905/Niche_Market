@@ -158,7 +158,7 @@ namespace NicheMarket.Services
             return true;
         }
 
-        private async Task<decimal> CalculateNewPrice(Order order)
+        public async Task<decimal> CalculateNewPrice(Order order)
         {
             decimal price = 0;
             foreach (var orderItem in order.Products)

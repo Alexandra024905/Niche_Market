@@ -1096,7 +1096,129 @@ namespace NicheMarket.Services.Tests
             await productService.DeleteProduct(entity.Id);
             List<Product> products = dBContext.Products.ToList();
 
-            Assert.False(products.Contains(entity), TestsMessages.ResultErrorMessage(nameof(productService.EditProduct)));
+            Assert.False(products.Contains(entity), TestsMessages.ResultErrorMessage(nameof(productService.DeleteProduct)));
+        }
+
+        [Test]
+        public async Task DeleteProductAndOrders_ValidData_ShouldCorrectlyDeleteEntityAndItsOrders()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+            Product entity = await dBContext.Products.FirstOrDefaultAsync();
+
+            Order newOrder = new Order
+            {
+                Id = Guid.NewGuid().ToString(),
+                RetailerId = entity.RetailerId,
+                Adress = "TestAdress",
+                ClientName = "ClientName",
+                ClientId = "69320701-412e-4de3-8e43-b39b17439c73",
+                IsCompleted = false,
+                Products = new List<OrderItem>() { new OrderItem() { Id = Guid.NewGuid().ToString(), ProductId = entity.Id, Quantity = 2 } },
+            };
+            dBContext.Orders.Add(newOrder);
+            dBContext.SaveChanges();
+
+            await productService.DeleteProduct(entity.Id);
+            List<Order> orders = dBContext.Orders.ToList();
+
+            Assert.False(orders.Contains(newOrder), TestsMessages.ResultErrorMessage(nameof(productService.DeleteProduct)));
+        }
+
+        [Test]
+        public async Task DeleteProductAndEditOrders_ValidData_ShouldCorrectlyDeleteEntityAndEditItsOrders()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+            await productService.CreateProduct(productServiceModel);
+           List< Product> products =  dBContext.Products.ToList();
+
+            OrderItem orderItem1 = new OrderItem() { Id = Guid.NewGuid().ToString(), ProductId = products[0].Id, Quantity = 1 };
+            dBContext.OrderItems.Add(orderItem1);
+            OrderItem orderItem2 = new OrderItem() { Id = Guid.NewGuid().ToString(), ProductId = products[1].Id, Quantity = 1 };
+            dBContext.OrderItems.Add(orderItem2);
+            dBContext.SaveChanges();
+
+           List< OrderItem> orderItems =  dBContext.OrderItems.ToList();
+
+            Order newOrder = new Order
+            {
+                Id = Guid.NewGuid().ToString(),
+                RetailerId = products[0].RetailerId,
+                Adress = "TestAdress",
+                ClientName = "ClientName",
+                ClientId = "69320701-412e-4de3-8e43-b39b17439c73",
+                IsCompleted = false,
+                Products = new List<OrderItem>() { orderItems[1], orderItems[0] },
+                TotalPrice = products[1].Price + products[0].Price
+            };
+            dBContext.Orders.Add(newOrder);
+            dBContext.SaveChanges();
+
+            await productService.DeleteProduct(products[0].Id);
+            List<Order> orders = dBContext.Orders.ToList();
+
+            Assert.False(orders[0].Products.Contains(orderItems[0]), TestsMessages.ResultErrorMessage(nameof(productService.DeleteProduct)));
+        }     
+        
+        [Test]
+        public async Task DeleteProductAndEditOrderPrice_ValidData_ShouldCorrectlyDeleteEntityAndEditThePriceOfItsOrders()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+            await productService.CreateProduct(productServiceModel);
+           List< Product> products =  dBContext.Products.ToList();
+
+            OrderItem orderItem1 = new OrderItem() { Id = Guid.NewGuid().ToString(), ProductId = products[0].Id, Quantity = 1 };
+            dBContext.OrderItems.Add(orderItem1);
+            OrderItem orderItem2 = new OrderItem() { Id = Guid.NewGuid().ToString(), ProductId = products[1].Id, Quantity = 1 };
+            dBContext.OrderItems.Add(orderItem2);
+            dBContext.SaveChanges();
+
+           List< OrderItem> orderItems =  dBContext.OrderItems.ToList();
+
+            Order newOrder = new Order
+            {
+                Id = Guid.NewGuid().ToString(),
+                RetailerId = products[0].RetailerId,
+                Adress = "TestAdress",
+                ClientName = "ClientName",
+                ClientId = "69320701-412e-4de3-8e43-b39b17439c73",
+                IsCompleted = false,
+                Products = new List<OrderItem>() { orderItems[1], orderItems[0] },
+                TotalPrice = products[1].Price + products[0].Price
+            };
+            dBContext.Orders.Add(newOrder);
+            dBContext.SaveChanges();
+
+            await productService.DeleteProduct(products[0].Id);
+            List<Order> orders = dBContext.Orders.ToList();
+
+            Assert.AreEqual(orders[0].TotalPrice,products[1].Price, TestsMessages.DoesNotCalculateCorrectlyErrorMessage("CalculateNewPrice", nameof(Order.TotalPrice)));
         }
 
         [Test]
