@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using NicheMarket.Data;
 using NicheMarket.Data.Models;
 using NicheMarket.Services.Models;
+using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using NUnit.Framework;
 using System;
@@ -503,27 +504,6 @@ namespace NicheMarket.Services.Tests
             Assert.AreNotEqual(productServiceModel.ImageURL, actualEntity.ImageURL, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.ImageURL)));
         }
 
-        //[Test]
-        //public async Task EditProductWithNullTitle_InvalidData_ShouldReturnFalse()
-        //{
-        //    ProductServiceModel productServiceModel = new ProductServiceModel()
-        //    {
-        //        Title = "TestProduct",
-        //        Price = 3,
-        //        Type = "TestProduct",
-        //        Description = "TestProduct",
-        //        ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
-        //        RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
-        //    };
-
-        //    await productService.CreateProduct(productServiceModel);
-        //    Product entity = await dBContext.Products.FirstOrDefaultAsync();
-        //    productServiceModel.Id = entity.Id;
-        //    productServiceModel.Title = null;
-        //    bool result = await productService.EditProduct(productServiceModel);
-        //    Assert.IsFalse(result, TestsMessages.ResultErrorMessage(nameof(productService.EditProduct)));
-        //}
-
         [Test]
         public async Task EditProductWithNullId_InvalidData_ShouldReturnFalse()
         {
@@ -563,8 +543,8 @@ namespace NicheMarket.Services.Tests
             productServiceModel.Title = "TestProduct3";
             await productService.CreateProduct(productServiceModel);
 
-            Assert.IsNotEmpty(await productService.AllProducts(), TestsMessages.ResultErrorMessage(nameof(productService.CreateProduct)));
-            Assert.IsNotNull(await productService.AllProducts(), TestsMessages.ResultErrorMessage(nameof(productService.CreateProduct)));
+            Assert.IsNotEmpty(await productService.AllProducts(), TestsMessages.ResultErrorMessage(nameof(productService.AllProducts)));
+            Assert.IsNotNull(await productService.AllProducts(), TestsMessages.ResultErrorMessage(nameof(productService.AllProducts)));
         }
 
         [Test]
@@ -579,33 +559,22 @@ namespace NicheMarket.Services.Tests
                 ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
                 RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
             };
-            List<ProductViewModel> expectedProducts = new List<ProductViewModel>();
 
             for (int i = 0; i < 3; i++)
             {
-                productServiceModel.Title += i.ToString();
                 await productService.CreateProduct(productServiceModel);
-                Product entity = await dBContext.Products.FirstOrDefaultAsync();
-                expectedProducts.Add(entity.To<ProductViewModel>());
-
             }
 
 
-            IEnumerable<ProductViewModel> retunedProducts = await productService.AllProducts();
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
 
-            List<ProductViewModel> actualProducts = new List<ProductViewModel>();
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
 
-            foreach (var product in retunedProducts)
-            {
-                actualProducts.Add(product);
-            }
-
-
-            Assert.AreEqual(actualProducts.Count, expectedProducts.Count, TestsMessages.ResultErrorMessage(nameof(productService.CreateProduct)));
+            Assert.AreEqual(actualProducts.Count, expectedProducts.Count, TestsMessages.ResultErrorMessage(nameof(productService.AllProducts)));
         }
 
         [Test]
-        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualValue()
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualIdValues()
         {
             ProductServiceModel productServiceModel = new ProductServiceModel()
             {
@@ -616,37 +585,558 @@ namespace NicheMarket.Services.Tests
                 ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
                 RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
             };
-            //Dictionary<string, ProductViewModel> expectedProducts = new Dictionary<string, ProductViewModel>();            Dictionary<string, ProductViewModel> expectedProducts = new Dictionary<string, ProductViewModel>();
-            List<ProductViewModel> expectedProducts = new List<ProductViewModel>();
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].Id, expectedProducts[i].Id, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.Id)));
+            }
+
+        }
+
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualTitleValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].Title, expectedProducts[i].Title, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.Title)));
+            }
+
+        }
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualPriceValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].Price, expectedProducts[i].Price, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.Price)));
+            }
+
+        }
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualDescriptionValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].Description, expectedProducts[i].Description, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.Description)));
+            }
+
+        }
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualImageURLValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].ImageURL, expectedProducts[i].ImageURL, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.ImageURL)));
+            }
+
+        }
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualRetailerIdValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].RetailerId, expectedProducts[i].RetailerId, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.RetailerId)));
+            }
+
+        }
+
+        [Test]
+        public async Task AllProducts_ValidData_ShouldReturnEntitiesWithEqualTypeValues()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+
+            for (int i = 0; i < 3; i++)
+            {
+                await productService.CreateProduct(productServiceModel);
+            }
+
+            List<ProductViewModel> expectedProducts = dBContext.Products.Select(p => p.To<ProductViewModel>()).ToList();
+
+            List<ProductViewModel> actualProducts = (await productService.AllProducts()).ToList();
+
+            for (int i = 0; i < actualProducts.Count; i++)
+            {
+                Assert.AreEqual(actualProducts[i].Type, expectedProducts[i].Type, TestsMessages.MappingErrorMessage(nameof(productService.AllProducts), nameof(Product.Type)));
+            }
+
+        }
+
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntity()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
             await productService.CreateProduct(productServiceModel);
+
+            Product product = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel productBinding = await productService.GetProduct(product.Id);
+
+            Assert.IsNotNull(productBinding, TestsMessages.ResultErrorMessage(nameof(productService.GetProduct)));
+        }
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntityWithCorrectTitle()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel actualEntity = await productService.GetProduct(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Title, actualEntity.Title, TestsMessages.MappingErrorMessage(nameof(productService.GetProduct), nameof(Product.Title)));
+        }
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntityWithCorrectDescription()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel actualEntity = await productService.GetProduct(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Description, actualEntity.Description, TestsMessages.MappingErrorMessage(nameof(productService.GetProduct), nameof(Product.Description)));
+        }
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntityWithCorrectPrice()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel actualEntity = await productService.GetProduct(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Price, actualEntity.Price, TestsMessages.MappingErrorMessage(nameof(productService.GetProduct), nameof(Product.Price)));
+        }
+
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntityWithCorrectRetailerId()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel actualEntity = await productService.GetProduct(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.RetailerId, actualEntity.RetailerId, TestsMessages.MappingErrorMessage(nameof(productService.GetProduct), nameof(Product.RetailerId)));
+        }
+
+
+        [Test]
+        public async Task GetProduct_ValidData_ShouldCorrectlyReturnEntityWithCorrectType()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductBindingModel actualEntity = await productService.GetProduct(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Type, actualEntity.Type, TestsMessages.MappingErrorMessage(nameof(productService.GetProduct), nameof(Product.Type)));
+        }
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntity()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product product = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(product.Id);
+
+            Assert.IsNotNull(actualEntity, TestsMessages.ResultErrorMessage(nameof(productService.EditProduct)));
+        }
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectTitle()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Title, actualEntity.Title, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.Title)));
+        }
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectDescription()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Description, actualEntity.Description, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.Description)));
+        }
+
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectImageURL()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.ImageURL, actualEntity.ImageURL, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.ImageURL)));
+        }
+
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectPrice()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Price, actualEntity.Price, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.Price)));
+        }
+
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectRetailerId()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.RetailerId, actualEntity.RetailerId, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.RetailerId)));
+        }
+
+
+        [Test]
+        public async Task ProductDetails_ValidData_ShouldCorrectlyReturnEntityWithCorrectType()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            ProductViewModel actualEntity = await productService.ProductDetails(expectedEntity.Id);
+
+            Assert.AreEqual(expectedEntity.Type, actualEntity.Type, TestsMessages.MappingErrorMessage(nameof(productService.EditProduct), nameof(Product.Type)));
+        }
+
+        [Test]
+        public async Task DeleteProduct_ValidData_ShouldReturnTrue()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
+            Product expectedEntity = await dBContext.Products.FirstOrDefaultAsync();
+
+            bool result = await productService.DeleteProduct(expectedEntity.Id);
+
+            Assert.IsTrue(result, TestsMessages.ResultErrorMessage(nameof(productService.DeleteProduct)));
+        }
+
+        [Test]
+        public async Task DeleteProduct_ValidData_ShouldCorrectlyDeleteEntity()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
+
             Product entity = await dBContext.Products.FirstOrDefaultAsync();
-            expectedProducts.Add(entity.To<ProductViewModel>());
+            await productService.DeleteProduct(entity.Id);
+            List<Product> products = dBContext.Products.ToList();
 
-            productServiceModel.Price = 5;
+            Assert.False(products.Contains(entity), TestsMessages.ResultErrorMessage(nameof(productService.EditProduct)));
+        }
+
+        [Test]
+        public async Task DeleteProductWithNullId_InvalidData_ShouldReturnFalse()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
+            {
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
             await productService.CreateProduct(productServiceModel);
-            Product entity2 = await dBContext.Products.FirstOrDefaultAsync();
-            expectedProducts.Add(entity2.To<ProductViewModel>());
 
-            expectedProducts.OrderBy(p => p.Id);
+            Product entity = await dBContext.Products.FirstOrDefaultAsync();
+            bool result = await productService.DeleteProduct(null);
 
-            IEnumerable<ProductViewModel> retunedProducts = await productService.AllProducts();
+            Assert.False(result, TestsMessages.ReturnsTrueWhenFalseIsExpected(nameof(productService.DeleteProduct)));
+        }
 
-            List<ProductViewModel> actualProducts = new List<ProductViewModel>();
-
-            foreach (var product in retunedProducts)
+        [Test]
+        public async Task DeleteNonExistentProduct_InvalidData_ShouldReturnFalse()
+        {
+            ProductServiceModel productServiceModel = new ProductServiceModel()
             {
-                actualProducts.Add(product);
-            }
+                Title = "TestProduct",
+                Price = 3,
+                Type = "TestProduct",
+                Description = "TestProduct",
+                ImageURL = "http://res.cloudinary.com/niche-market/image/upload/v1612549640/7223595e-3b3e-4452-bd9e-f3fad9130046.png",
+                RetailerId = "69320701-412e-4de3-8e43-b39b17439c73"
+            };
+            await productService.CreateProduct(productServiceModel);
 
-            bool result = true;
-            foreach (var actualProduct in actualProducts)
-            {
-                if (!expectedProducts.Contains(actualProduct))
-                {
-                    result = false;
-                }
-            }
-            Assert.IsTrue(result);
+            Product entity = await dBContext.Products.FirstOrDefaultAsync();
+            bool result = await productService.DeleteProduct("non-existent id");
+
+            Assert.False(result, TestsMessages.ReturnsTrueWhenFalseIsExpected(nameof(productService.DeleteProduct)));
         }
 
 
