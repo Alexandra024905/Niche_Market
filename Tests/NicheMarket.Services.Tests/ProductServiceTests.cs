@@ -69,7 +69,7 @@ namespace NicheMarket.Services.Tests
             await productService.CreateProduct(productServiceModel);
             Product actualEntity = await dBContext.Products.FirstOrDefaultAsync();
 
-            Assert.IsNotNull(actualEntity);
+            Assert.IsNotNull(actualEntity, TestsMessages.ResultErrorMessage(nameof(productService.CreateProduct)));
         }
 
         [Test]

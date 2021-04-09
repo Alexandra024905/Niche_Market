@@ -56,7 +56,7 @@ namespace NicheMarket.Web.Controllers
 
         public async Task<IActionResult> OrderDetails(string orderId)
         {
-            return View(await orderService.DetailsOrder(orderId));
+            return View(await orderService.OrderDetails(orderId));
         }
     }
 }

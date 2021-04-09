@@ -64,7 +64,7 @@ namespace NicheMarket.Services
             return result;
         }
 
-        public async Task<OrderViewModel> DetailsOrder(string id)
+        public async Task<OrderViewModel> OrderDetails(string id)
         {
             Order order = await dBContext.Orders.Where(o => o.Id == id).Include(o => o.Products).FirstOrDefaultAsync();
             OrderViewModel orderViewModel = new OrderViewModel
@@ -74,7 +74,9 @@ namespace NicheMarket.Services
                 Adress = order.Adress,
                 TotalPrice = order.TotalPrice,
                 IsCompleted = order.IsCompleted,
-                Products = await  FindProducts(order.Products)
+                Products = await  FindProducts(order.Products),
+                ClientId=order.ClientId,
+                RetailerId=order.RetailerId
             };
             return orderViewModel;
         }
