@@ -102,17 +102,17 @@ namespace NicheMarket.Services
             return result;
         }
 
-        public async Task<Product> FindProduct(string id)
+        private async Task<Product> FindProduct(string id)
         {
             return await dBContext.Products.FirstOrDefaultAsync(p => p.Id == id);
         }
-        public async Task<ProductViewModel> Find(string id)
+        private async Task<ProductViewModel> Find(string id)
         {
             Product product = await FindProduct(id);
             return product.To<ProductViewModel>();
         }
 
-        public List<Category> ProductCategories(List<string> categoriesNames)
+        private List<Category> ProductCategories(List<string> categoriesNames)
         {
             List<Category> categories = new List<Category>();
             foreach (var categorie in categoriesNames)
