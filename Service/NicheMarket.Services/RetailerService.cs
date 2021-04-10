@@ -49,12 +49,16 @@ namespace NicheMarket.Services
 
         public async Task<bool> ComleteOrder(string orderId)
         {
-            Order order = await dBContext.Orders.FindAsync(orderId);
+            //Order order = await dBContext.Orders.FindAsync(orderId);
+            Order order = await dBContext.Orders.FirstOrDefaultAsync(o => o.Id== orderId);
             if (order == null) return false;
-            order.IsCompleted = true;
-            dBContext.Orders.Update(order);
-            dBContext.SaveChanges();
-            return true;
+            else
+            {
+                order.IsCompleted = true;
+                dBContext.Orders.Update(order);
+                dBContext.SaveChanges();
+                return true;
+            }
         }
         public async Task<bool> UndoOrder(string orderId)
         {
