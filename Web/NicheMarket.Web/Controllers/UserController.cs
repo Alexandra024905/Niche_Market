@@ -40,22 +40,26 @@ namespace NicheMarket.Web.Controllers
             }
             else
             {
-                return View("EditUserInfo", userService.ProfileDetails(user));
+                return View("EditUserInfo", await userService.ProfileDetails(user));
             }
         }
 
         public async Task<IActionResult> EditProfil(UserBindingModel userBindingModel)
         {
             NicheMarketUser user = await userManager.GetUserAsync(User);
-            await singInManagerUser.RefreshSignInAsync(await userService.EditProfil(userBindingModel, user));
-            logger.LogInformation("User changed their password successfully.");
-            return View("EditUserInfo", userService.ProfileDetails(user));
+            NicheMarketUser newUser = await userService.EditProfil(userBindingModel, user);
+            await singInManagerUser.RefreshSignInAsync(newUser);
+            await userManager.UpdateAsync(newUser);
+            return View("EditUserInfo", await userService.ProfileDetails(user));
         }
 
         public async Task<IActionResult> ChangeRole()
         {
             NicheMarketUser user = await userManager.GetUserAsync(User);
-            return View("EditUserInfo", await userService.ChangeRole(user));
+            NicheMarketUser newUser = await userService.ChangeRole( user);
+            await singInManagerUser.RefreshSignInAsync(newUser);
+            await userManager.UpdateAsync(newUser);
+            return View("EditUserInfo", await userService.ProfileDetails(user));
         }
 
     }

@@ -18,6 +18,6 @@ namespace NicheMarket.Services
 
         Task<NicheMarketUser> EditProfil(UserBindingModel userBindingModel, NicheMarketUser user);
         Task<UserBindingModel> ProfileDetails(NicheMarketUser user);
-        Task<UserBindingModel> ChangeRole (NicheMarketUser user);
+        Task<NicheMarketUser> ChangeRole (NicheMarketUser user);
     }
 }

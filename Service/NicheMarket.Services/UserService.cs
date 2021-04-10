@@ -108,39 +108,30 @@ namespace NicheMarket.Services
             return userBindingModel;
         }
 
-        public async Task<UserBindingModel> ChangeRole(NicheMarketUser user)
+        public async Task<NicheMarketUser> ChangeRole(NicheMarketUser user)
         {
-            UserBindingModel userBindingModel = new UserBindingModel()
-            {
-                UserId = user.Id,
-                RoleId = (await dBContext.UserRoles.Where(ur => ur.UserId == user.Id).FirstOrDefaultAsync()).RoleId,
-                Email = user.Email,
-                Adress = user.Address,
-                Name = user.Name
-            };
+            string roleId = (await dBContext.UserRoles.Where(ur => ur.UserId == user.Id).FirstOrDefaultAsync()).RoleId;
 
-            string roleName = FindRoleName(userBindingModel.RoleId);
-            if (roleName == "Admin")
+            string roleName = FindRoleName(roleId);
+            if (roleName == "Retailer")
             {
                 await userManager.AddToRoleAsync(user, "Client");
                 await userManager.RemoveFromRoleAsync(user, roleName);
             }
             else
             {
-                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.AddToRoleAsync(user, "Retailer");
                 await userManager.RemoveFromRoleAsync(user, roleName);
             }
+            dBContext.SaveChanges();
 
-            return userBindingModel;
+            return user;
         }
         public async Task<NicheMarketUser> EditProfil(UserBindingModel userBindingModel, NicheMarketUser user)
         {
-            if (userBindingModel.NewPassword != null)
-            {
-                user.Address = userBindingModel.Adress;
-                user.Email = userBindingModel.Email;
-                user.Name = userBindingModel.Name;
-            }
+            user.Address = userBindingModel.Adress;
+            user.Email = userBindingModel.Email;
+            user.Name = userBindingModel.Name;
 
             dBContext.Users.Update(user);
             await dBContext.SaveChangesAsync();
