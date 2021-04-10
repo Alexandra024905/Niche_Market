@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using NicheMarket.Data;
 using NicheMarket.Data.Models.Users;
+using NicheMarket.Web.Models.BindingModels;
 using NicheMarket.Web.Models.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -41,7 +43,6 @@ namespace NicheMarket.Services
             return users;
         }
 
-        //to do  EditUserRole(UserRoleSeModel userRoleServiceModel)
         public async Task<bool> EditUserRole(UserRoleViewModel userRoleViewModel)
         {
             bool result = false;
@@ -72,7 +73,7 @@ namespace NicheMarket.Services
                 UserName = (await dBContext.Users.FindAsync(userId)).UserName,
                 RoleName = FindRoleName(roleId)
             };
-            return  userRoleViewModel;
+            return userRoleViewModel;
 
         }
 
@@ -91,6 +92,62 @@ namespace NicheMarket.Services
             }
             return result;
         }
+
+
+        public async Task<UserBindingModel> ProfileDetails(NicheMarketUser user)
+        {
+            UserBindingModel userBindingModel = new UserBindingModel()
+            {
+                UserId = user.Id,
+                RoleId = (await dBContext.UserRoles.Where(ur => ur.UserId == user.Id).FirstOrDefaultAsync()).RoleId,
+                Email = user.Email,
+                Adress = user.Address,
+                Name = user.Name
+            };
+
+            return userBindingModel;
+        }
+
+        public async Task<UserBindingModel> ChangeRole(NicheMarketUser user)
+        {
+            UserBindingModel userBindingModel = new UserBindingModel()
+            {
+                UserId = user.Id,
+                RoleId = (await dBContext.UserRoles.Where(ur => ur.UserId == user.Id).FirstOrDefaultAsync()).RoleId,
+                Email = user.Email,
+                Adress = user.Address,
+                Name = user.Name
+            };
+
+            string roleName = FindRoleName(userBindingModel.RoleId);
+            if (roleName == "Admin")
+            {
+                await userManager.AddToRoleAsync(user, "Client");
+                await userManager.RemoveFromRoleAsync(user, roleName);
+            }
+            else
+            {
+                await userManager.AddToRoleAsync(user, "Admin");
+                await userManager.RemoveFromRoleAsync(user, roleName);
+            }
+
+            return userBindingModel;
+        }
+        public async Task<NicheMarketUser> EditProfil(UserBindingModel userBindingModel, NicheMarketUser user)
+        {
+            if (userBindingModel.NewPassword != null)
+            {
+                user.Address = userBindingModel.Adress;
+                user.Email = userBindingModel.Email;
+                user.Name = userBindingModel.Name;
+            }
+
+            dBContext.Users.Update(user);
+            await dBContext.SaveChangesAsync();
+
+            return user;
+        }
+
 
         private bool UserExists(string id)
         {
