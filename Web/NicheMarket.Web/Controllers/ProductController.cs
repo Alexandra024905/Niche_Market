@@ -1,4 +1,5 @@
 ﻿using AutoMapperConfiguration;
+using CloudinaryDotNet.Actions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NicheMarket.Data.Models;
@@ -45,7 +46,7 @@ namespace NicheMarket.Web.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Retailer,Admin")]
+        [Authorize(Roles = "Retailer")]
         public async Task<IActionResult> Create(CreateProductBindingModel createProductBindingModel)
         {
             ProductServiceModel productServiceModel = createProductBindingModel.To<ProductServiceModel>();
@@ -62,14 +63,14 @@ namespace NicheMarket.Web.Controllers
 
 
         [HttpGet]
-        [Authorize(Roles = "Retailer,Admin")]
+        [Authorize(Roles = "Retailer")]
         public async Task<IActionResult> Edit(string id)
         {
             return View(await productService.GetProduct(id));
         }
 
         [HttpPost]
-        [Authorize(Roles = "Retailer,Admin")]
+        [Authorize(Roles = "Retailer")]
         public async Task<IActionResult> Edit(ProductBindingModel product)
         {
             ProductServiceModel serviceModel = product.To<ProductServiceModel>();
@@ -105,11 +106,18 @@ namespace NicheMarket.Web.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Retailer,Admin")]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        [Authorize(Roles = "Admin,Retailer")]
+        public async Task<IActionResult> DeleteProductAsAdmin(string id)
         {
             await productService.DeleteProduct(id);
+            if (User.IsInRole("Admin"))
+            {
+            return Redirect("/Administration/Products");
+            }
+            else 
+            {
             return Redirect("/Retailer/RetailerProducts");
+            }
         }
     }
 

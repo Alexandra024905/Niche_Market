@@ -124,20 +124,26 @@ namespace NicheMarket.Services
 
         private async Task<bool> ProductExists(string id)
         {
-            return await dBContext.Products.AnyAsync(e => e.Id == id);
+            return (await dBContext.Products.FirstOrDefaultAsync(e => e.Id == id)) != null;
         }
 
         private async Task<bool> DeleteProductFromAllOrders(Product productToRemove)
         {
-            foreach (var orderItem in dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id))
+            bool result = false;
+            if (dBContext.OrderItems.Count() > 0)
             {
-                IEnumerable<Order> orders = dBContext.Orders.Include("Products").Where(o => o.Products.Contains(orderItem));
-                await EditOrdersWithOrderItem(orders, orderItem);
-                dBContext.Remove(orderItem);
+                OrderItem[] orderItems = new OrderItem[] { };
+                orderItems = await dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id).ToArrayAsync();
+                foreach (var orderItem in orderItems)
+                {
+                    IEnumerable<Order> orders = dBContext.Orders.Include("Products").Where(o => o.Products.Contains(orderItem));
+                    await EditOrdersWithOrderItem(orders, orderItem);
+                    dBContext.OrderItems.Remove(orderItem);
+                }
+                dBContext.OrderItems.RemoveRange(dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id));
+                result = dBContext.Products.Remove(productToRemove) != null;
+                dBContext.SaveChanges();
             }
-            dBContext.OrderItems.RemoveRange(dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id));
-            bool result = dBContext.Products.Remove(productToRemove)!=null;
-            dBContext.SaveChanges();
             return result;
         }
 

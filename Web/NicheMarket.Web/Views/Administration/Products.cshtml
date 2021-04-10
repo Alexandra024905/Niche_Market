@@ -19,12 +19,7 @@
                     <h6 asp-for="Price" class="card-title">Price:  @Html.DisplayFor(modelItem => item.Price)</h6>
 
                     <p class="card-text">Type : @Html.DisplayFor(model => item.Type)</p>
-                    <div type="submit"  class="btn btn-primary">
-                        <a asp-controller="Product" asp-action="Edit" asp-route-id="@item.Id" style="color:white">Edit</a>
-                    </div>                    
-                    <div type="submit"  class="btn btn-primary">
-                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" style="color:white">Details</a>
-                    </div>                    
+                   
                     <div type="submit"  class="btn btn-primary">
                         <a asp-controller="Product" asp-action="Delete" asp-route-id="@item.Id" style="color:white">Delete</a>
                     </div>
