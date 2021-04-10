@@ -6,6 +6,7 @@
 @inject SignInManager<NicheMarketUser> SignInManager
 @inject UserManager<NicheMarketUser> UserManager
 
+
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
@@ -14,13 +15,13 @@
         {
             <li class="nav-item">
                 <form asp-controller="Retailer" asp-action="RetailerProducts">
-                    <button type="submit" class="nav-link btn btn-link text-dark">My Products</button>
+                    <button type="submit" class="nav-link btn btn-link text-white">My Products</button>
                 </form>
             </li>
 
 
             <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+                <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
                     Client Orders
                 </a>
                 <ul class="dropdown-menu text-dark" aria-labelledby="navbarDropdown">
@@ -42,28 +43,28 @@
             <li class="nav-item">
 
                 <form asp-controller="Administration" asp-action="Products">
-                    <button type="submit" class="nav-link btn btn-link text-dark">All Products</button>
+                    <button type="submit" class="nav-link btn btn-link text-white">All Products</button>
                 </form>
             </li>
             <li class="nav-item">
                 <form asp-controller="Administration" asp-action="Users">
-                    <button type="submit" class="nav-link btn btn-link text-dark">Users</button>
+                    <button type="submit" class="nav-link btn btn-link text-white">Users</button>
                 </form>
             </li>
 
             <li>
                 <form asp-controller="Administration" asp-action="Categories">
-                    <button type="submit" class="nav-link btn btn-link text-dark">Categories</button>
+                    <button type="submit" class="nav-link btn btn-link text-white">Categories</button>
                 </form>
             </li>
         }
         <li class="nav-item">
             <form asp-controller="Client" asp-action="MyOrders">
-                <button type="submit" class="nav-link btn btn-link text-dark">Order History</button>
+                <button type="submit" class="nav-link btn btn-link text-white">Order History</button>
             </form>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
+            <a class="nav-link dropdown-toggle text-white" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-expanded="false">
                 @UserManager.GetUserName(User)
             </a>
             <ul class="dropdown-menu text-dark" aria-labelledby="navbarDropdown">
@@ -92,7 +93,7 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
+            <a class="nav-link text-white" id="login" asp-area="Identity" asp-page="/Account/Login">Login</a>
         </li>
     }
 </ul>
