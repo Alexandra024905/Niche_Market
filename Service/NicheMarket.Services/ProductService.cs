@@ -130,8 +130,7 @@ namespace NicheMarket.Services
         private async Task<bool> DeleteProductFromAllOrders(Product productToRemove)
         {
             bool result = false;
-            if (dBContext.OrderItems.Count() > 0)
-            {
+
                 OrderItem[] orderItems = new OrderItem[] { };
                 orderItems = await dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id).ToArrayAsync();
                 foreach (var orderItem in orderItems)
@@ -143,7 +142,7 @@ namespace NicheMarket.Services
                 dBContext.OrderItems.RemoveRange(dBContext.OrderItems.Where(oi => oi.ProductId == productToRemove.Id));
                 result = dBContext.Products.Remove(productToRemove) != null;
                 dBContext.SaveChanges();
-            }
+
             return result;
         }
 

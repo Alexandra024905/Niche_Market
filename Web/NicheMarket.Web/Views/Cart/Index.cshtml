@@ -43,7 +43,7 @@
                                             <a asp-controller="Cart" asp-action="Decrease" asp-route-id="@cartItem.Product.Id">-</a>
                                             <a href="@cartItem.Quantity" class="border">@cartItem.Quantity</a>
                                             <a asp-controller="Cart" asp-action="Increase" asp-route-id="@cartItem.Product.Id">+</a>
-                                            <div class="col">&euro;@cartItem.Product.Price </div>
+                                            <div class="col">&euro;@cartItem.Product.Price</div>
                                         </div>
                                         <div class="col">
                                             <a class="close" asp-controller="Cart" asp-action="Remove" asp-route-id="@cartItem.Product.Id" color="#fff"> &#10005;</a>
